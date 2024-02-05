@@ -14,6 +14,7 @@ import Authors from "./Components/Authors/Index";
 import AddAuthor from "./Components/Authors/AddAuthors/Index";
 import Books from "./Components/Books/Index";
 import AddBook from "./Components/Books/AddBooks/AddBook";
+import "./index.css";
 
 const router = createBrowserRouter([
   {

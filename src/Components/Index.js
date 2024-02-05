@@ -2,10 +2,9 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-
 function Index() {
   return (
-    <div className="w-20 space-x-5">
+    <div className="w-full space-x-5 flex justify-end px-5">
       <Link style={{ textDecoration: "none" }} as="li" to="AddBook">
         AddBook
       </Link>
