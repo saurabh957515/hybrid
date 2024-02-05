@@ -6,16 +6,33 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import Books from "./Components/Books";
+
 import Index from "./Components/Index";
+import Authors from "./Components/Authors/Index";
+import AddAuthor from "./Components/Authors/AddAuthors/Index";
+import Books from "./Components/Books/Index";
+import AddBook from "./Components/Books/AddBooks/Index";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
   },
   {
-    path: "about",
+    path: "Authors",
+    element: <Authors />,
+  },
+  {
+    path: "Add Author",
+    element: <AddAuthor />,
+  },
+  {
+    path: "Books",
     element: <Books />,
+  },
+  {
+    path: "Add Book",
+    element: <AddBook />,
   },
 ]);
 
