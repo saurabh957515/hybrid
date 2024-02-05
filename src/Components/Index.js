@@ -1,9 +1,11 @@
+/** @format */
+
 import React from "react";
 import { Link } from "react-router-dom";
 
 function Index() {
   return (
-    <div className="bg-blue-500 w-20">
+    <div className="text-red-500 w-20">
       <Link style={{ textDecoration: "none" }} as="li" to="Add Book">
         Home
       </Link>

@@ -11,7 +11,6 @@ import Index from "./Components/Index";
 import Authors from "./Components/Authors/Index";
 import AddAuthor from "./Components/Authors/AddAuthors/Index";
 import Books from "./Components/Books/Index";
-import AddBook from "./Components/Books/AddBooks/Index";
 
 const router = createBrowserRouter([
   {
@@ -30,10 +29,10 @@ const router = createBrowserRouter([
     path: "Books",
     element: <Books />,
   },
-  {
-    path: "Add Book",
-    element: <AddBook />,
-  },
+  // {
+  //   path: "Add Book",
+  //   element: <AddBook />,
+  // },
 ]);
 
 createRoot(document.getElementById("root")).render(
