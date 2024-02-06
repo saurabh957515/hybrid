@@ -8,7 +8,7 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-
+import "./index.css";
 import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Index";
 import AddAuthor from "./Components/Authors/AddAuthors/Index";
@@ -40,5 +40,5 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />
-  );
+  <RouterProvider router={router} />
+);

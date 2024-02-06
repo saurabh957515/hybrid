@@ -27,27 +27,46 @@ const AddBook = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    axios.post("/book", book).then((res) => {
-      if (res.data.errors) {
-        setErrors(() => {
-          let newErrors = {};
-          _.forIn(res.data.errors, function (value, key) {
-            newErrors[key] = value.message;
+
+    const formData = new FormData();
+    formData.append("title", book.title);
+    formData.append("author", book.author);
+    formData.append("publishDate", book.publishDate);
+    formData.append("pageCount", book.pageCount);
+    formData.append("coverImage", book.coverImage); // Append file object
+    formData.append("description", book.description);
+
+    axios.post("/book", formData)
+      .then((res) => {
+        if (res.data.errors) {
+          setErrors(() => {
+            let newErrors = {};
+            _.forIn(res.data.errors, function (value, key) {
+              newErrors[key] = value.message;
+            });
+            return newErrors;
           });
-          return newErrors;
-        });
-      } else {
-        setBook(res.data);
-      }
-    });
+        } else {
+          // Handle successful response
+          setBook(res.data);
+          setErrors({})
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    handleBook("coverImage", file);
+  };
   console.log(book);
 
   return (
     <div>
       <Layout />
-      <form onSubmit={onSubmit} className="w-full grid grid-cols-2 p-5 gap-4">
+      <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Title
@@ -75,6 +94,7 @@ const AddBook = () => {
             PublishedDate
           </label>
           <TextInput
+          value={book?.publishDate}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             type="date"
             name="publishDate"
@@ -96,10 +116,9 @@ const AddBook = () => {
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             CoverImage
           </label>
-          <TextInput
+          <input
             type="file"
-            value={book?.coverImage}
-            handleChange={(e) => handleBook(e.target.name, e.target.value)}
+            onChange={handleFileChange} // Handle file change
             name="coverImage"
           />
           <InputError message={errors?.coverImage} />

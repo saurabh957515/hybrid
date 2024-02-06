@@ -7,26 +7,18 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
 
-app.use('/', express.static(path.join(__dirname, 'images')));
 const storageEngine = multer.diskStorage({
-  dest: "../public/images",
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}--${file.originalname}`);
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public', 'images')); // Destination directory
   },
-});
-const upload = multer({
-  dest: "../public/images"
-});
-const checkFileType = function (file, cb) {
-  const fileTypes = /jpeg|jpg|png|gif|svg/;
-  const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimeType = fileTypes.test(file.mimetype);
-  if (mimeType && extName) {
-    return cb(null, true);
-  } else {
-    cb("Error: You can Only Upload Images!!");
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}--${file.originalname}`); // File naming
   }
-};
+});
+
+const upload = multer({   dest: 'public/images'});
+
+
 router.get("/", async (req, res) => {
   let query = Book.find();
   if (req.query.title) {
@@ -55,7 +47,7 @@ router.get("/new", async (req, res) => {
   renderNewPage(res, new Book());
 });
 router.post("/", upload.single("coverImage"), async (req, res) => {
-  console.log(req?.file);
+  console.log(req?.file?.filename);
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
