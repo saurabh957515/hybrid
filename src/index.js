@@ -9,7 +9,7 @@ import {
   Link,
 } from "react-router-dom";
 
-import Index from "./Components/Index";
+import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Index";
 import AddAuthor from "./Components/Authors/AddAuthors/Index";
 import Books from "./Components/Books/Index";
@@ -19,14 +19,14 @@ import "./index.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
+    element: <Layout />,
   },
   {
     path: "Authors",
     element: <Authors />,
   },
   {
-    path: "AddAuthor",
+    path: "Authors/new",
     element: <AddAuthor />,
   },
   {
@@ -34,11 +34,11 @@ const router = createBrowserRouter([
     element: <Books />,
   },
   {
-    path: "AddBook",
+    path: "Books/new",
     element: <AddBook />,
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
-);
+    <RouterProvider router={router} />
+  );
