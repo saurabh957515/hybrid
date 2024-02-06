@@ -6,18 +6,16 @@ const path = require("path");
 const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
+
+app.use('/', express.static(path.join(__dirname, 'images')));
 const storageEngine = multer.diskStorage({
-  destination: "public/images",
+  dest: "../public/images",
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}--${file.originalname}`);
   },
 });
 const upload = multer({
-  storage: storageEngine,
-  limits: { fileSize: 10000000 },
-  fileFilter: (req, file, cb) => {
-    checkFileType(file, cb);
-  },
+  dest: "../public/images"
 });
 const checkFileType = function (file, cb) {
   const fileTypes = /jpeg|jpg|png|gif|svg/;
@@ -56,8 +54,8 @@ router.get("/", async (req, res) => {
 router.get("/new", async (req, res) => {
   renderNewPage(res, new Book());
 });
-
-router.post("/", upload.single("cover"), async (req, res) => {
+router.post("/", upload.single("coverImage"), async (req, res) => {
+  console.log(req?.file);
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
@@ -68,14 +66,13 @@ router.post("/", upload.single("cover"), async (req, res) => {
   });
   try {
     const newBook = await book.save();
-    res.redirect(`books/${newBook.id}`);
+    res.send(newBook);
   } catch (error) {
-    console.log(error);
-
-    if (req.file) {
-      fs.unlink(path.join(__dirname, "public/images", req?.file?.filename));
-    }
-    renderNewPage(res, book, error);
+    res.send(error);
+    // if (req.file) {
+    //   fs.unlink(path.join(__dirname, "public/images", req?.file?.filename));
+    // }
+    // renderNewPage(res, book, error);
   }
 });
 
