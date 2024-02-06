@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 function Layout() {
   return (
     <div className="gradient-to-r from-background-dark to-background-light">
-      <header className="bg-gray-800 p-4">
-        <nav className="flex justify-between items-center">
+      <header className="p-4 bg-gray-800">
+        <nav className="flex items-center justify-between">
         <Link
             to="/"
-            className="text-white text-3xl font-bold hover:text-white focus:outline-none focus:underline focus:text-white"
+            className="text-3xl font-bold text-white hover:text-white focus:outline-none focus:underline focus:text-white"
           >
             MyLibrary
          </Link>

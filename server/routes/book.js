@@ -9,15 +9,14 @@ const multer = require("multer");
 
 const storageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'public', 'images')); // Destination directory
+    cb(null, path.join(__dirname, "public", "images")); // Destination directory
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}--${file.originalname}`); // File naming
-  }
+  },
 });
 
-const upload = multer({   dest: 'public/images'});
-
+const upload = multer({ dest: "public/images" });
 
 router.get("/", async (req, res) => {
   let query = Book.find();
@@ -33,13 +32,13 @@ router.get("/", async (req, res) => {
 
   try {
     const books = await query.exec();
-    res.render("books/index", {
+    res.send({
       books: books,
       searchOptions: req.query,
     });
   } catch (error) {
     console.error(error);
-    res.redirect("/");
+    res.send(error);
   }
 });
 

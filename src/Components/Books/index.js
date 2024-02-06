@@ -1,48 +1,46 @@
-/** @format */
-
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 import Layout from "../Layout";
-
-function Index() {
-  const [book, setBooks] = useState({});
-  const getData = () => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => setBooks(data));
-  };
-  console.log("data here", book);
+export default function Index() {
+  const [books, setBooks] = useState([]);
+  const [Errors, setErrors] = useState([]);
+  useEffect(() => {
+    getData();
+  }, []);
+  function getData() {
+    axios
+      .get("/book")
+      .then((res) => {
+        if (res.data.errors) {
+          setErrors(() => {
+            let newErrors = {};
+            _.forIn(res.data.errors, function (value, key) {
+              newErrors[key] = value.message;
+            });
+            return newErrors;
+          });
+        } else {
+          // Handle successful response
+          setBooks(res.data.books);
+          setErrors({});
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
   return (
-    <div className="bg-backgroundLight">
+    <div>
       <Layout />
-      <form>
-        <div className="book-details">
-          <div>
-            <img
-              className="book-cover w-200 h-267"
-              src={`/images/${book?.coverImage}`}
-              alt={book?.title}
-            />
-            <div className="book-details-btn-grid">
-              <a className="btn btn-primary" href={`/books/${book?.id}/edit`}>
-                Edit
-              </a>
-            </div>
-          </div>
-          <div className="book-details-grid">
-            <div className="book-details-label">Author:</div>
-            <div>{book?.author?.name}</div>
-            <div className="book-details-label">Publish Date:</div>
-            <div>{new Date(book?.publishDate).toDateString()}</div>
-            <div className="book-details-label">Page Count:</div>
-            <div>{book?.pageCount}</div>
-            <div className="book-details-label">Description:</div>
-            <div>{book?.description}</div>
-          </div>
-        </div>
-      </form>
+      <div className="grid grid-cols-3">
+        {books?.map((book) => (
+          <div>HELo</div>
+        ))}
+      </div>
+
+      <button onClick={getData}>GetData</button>
     </div>
   );
 }
-
-export default Index;

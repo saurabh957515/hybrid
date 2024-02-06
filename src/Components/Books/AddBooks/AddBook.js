@@ -82,7 +82,7 @@ const AddBook = () => {
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Author
           </label>
-          <TextInput
+          <ReactSelect
             value={book?.author}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="author"
