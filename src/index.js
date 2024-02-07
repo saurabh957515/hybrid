@@ -11,9 +11,7 @@ import {
 import "./index.css";
 import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Index";
-import AddAuthor from "./Components/Authors/AddAuthors/Index";
 import Books from "./Components/Books/Index";
-import AddBook from "./Components/Books/AddBooks/AddBook";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -25,17 +23,10 @@ const router = createBrowserRouter([
     path: "Authors",
     element: <Authors />,
   },
-  {
-    path: "Authors/new",
-    element: <AddAuthor />,
-  },
+
   {
     path: "Books",
     element: <Books />,
-  },
-  {
-    path: "Books/new",
-    element: <AddBook />,
   },
 ]);
 

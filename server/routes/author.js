@@ -5,7 +5,6 @@ const router = express.Router();
 const Author = require("../models/author");
 const Book = require("../models/book");
 router.get("/", async (req, res) => {
-console.log("hello")
   let searchOptions = {};
   if (
     req.query.name !== undefined &&
@@ -14,7 +13,6 @@ console.log("hello")
   ) {
     searchOptions.name = req.query.name;
   }
-console.log("authors",req.query)
   try {
     const authors = await Author.find(searchOptions);
     console.log("new auhtor", authors);

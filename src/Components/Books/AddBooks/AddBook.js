@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import Layout from "../../Layout";
-import TextInput from "../../../Fileds/TextInput";
-import ReactSelect from "../../../Fileds/ReactSelect";
+import TextInput from "../../Fileds/TextInput";
+import ReactSelect from "../../Fileds/ReactSelect";
 import _ from "lodash";
 import axios from "axios";
-import PrimaryButton from "../../../Fileds/PrimaryButton";
-import InputError from "../../../Fileds/InputError";
-const AddBook = () => {
+import PrimaryButton from "../../Fileds/PrimaryButton";
+import InputError from "../../Fileds/InputError";
+const AddBook = ({ authorOptions }) => {
   const [errors, setErrors] = useState({});
   const [book, setBook] = useState({
     title: "",
@@ -27,7 +27,6 @@ const AddBook = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("title", book.title);
     formData.append("author", book.author);
@@ -36,7 +35,8 @@ const AddBook = () => {
     formData.append("coverImage", book.coverImage); // Append file object
     formData.append("description", book.description);
 
-    axios.post("/book", formData)
+    axios
+      .post("/book", formData)
       .then((res) => {
         if (res.data.errors) {
           setErrors(() => {
@@ -49,7 +49,7 @@ const AddBook = () => {
         } else {
           // Handle successful response
           setBook(res.data);
-          setErrors({})
+          setErrors({});
         }
       })
       .catch((error) => {
@@ -65,7 +65,6 @@ const AddBook = () => {
 
   return (
     <div>
-      <Layout />
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
@@ -83,6 +82,7 @@ const AddBook = () => {
             Author
           </label>
           <ReactSelect
+            options={authorOptions}
             value={book?.author}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="author"
@@ -94,7 +94,7 @@ const AddBook = () => {
             PublishedDate
           </label>
           <TextInput
-          value={book?.publishDate}
+            value={book?.publishDate}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             type="date"
             name="publishDate"
