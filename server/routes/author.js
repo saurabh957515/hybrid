@@ -5,6 +5,7 @@ const router = express.Router();
 const Author = require("../models/author");
 const Book = require("../models/book");
 router.get("/", async (req, res) => {
+console.log("hello")
   let searchOptions = {};
   if (
     req.query.name !== undefined &&
@@ -13,14 +14,16 @@ router.get("/", async (req, res) => {
   ) {
     searchOptions.name = req.query.name;
   }
+console.log("authors",req.query)
   try {
     const authors = await Author.find(searchOptions);
-    res.render("authors/index", {
+    console.log("new auhtor", authors);
+    res.send({
       authors: authors,
       searchOptions: req.query,
     });
   } catch (error) {
-    res.redirect("/");
+    res.send(error);
   }
 });
 
@@ -34,17 +37,16 @@ router.get("/new", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  console.log(req.body.name);
   const author = new Author({
     name: req.body.name,
   });
 
   try {
     const newAuthor = await author.save();
-    res.redirect(`authors/${newAuthor.id}`);
+    res.send(newAuthor);
   } catch (error) {
-    res.render("authors/new", {
-      author: author,
-    });
+    res.send(error);
   }
 });
 router.get("/:id", async (req, res) => {

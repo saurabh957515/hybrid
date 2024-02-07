@@ -24,7 +24,6 @@ export default function Index() {
             return newErrors;
           });
         } else {
-          // Handle successful response
           setBooks(res.data.books);
           setAuthorOptions(res.data?.searchOptions);
           setErrors({});
@@ -40,7 +39,7 @@ export default function Index() {
     <div>
       <Layout />
 
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 ">
         {books?.map((book, index) => (
           <div key={index}>
             HELo
