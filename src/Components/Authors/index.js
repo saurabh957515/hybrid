@@ -6,6 +6,8 @@ import axios from "axios";
 import PopUp from "../Fileds/PopUp";
 import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Index() {
   const [authors, setAuthors] = useState([]);
@@ -23,9 +25,9 @@ function Index() {
   useEffect(() => {
     axios.get("/author").then((res) => setAuthors(res.data.authors));
   }, [isOpen]);
-
+  const notify = () => toast("Wow so easy!");
   return (
-    <div className="">
+    <div className="relative">
       <Layout />
       <div className="flex space-x-4 w-full my-2">
         {authors?.map((author) => (
@@ -35,6 +37,21 @@ function Index() {
         ))}
       </div>
       Authors
+      <div>
+        <button onClick={notify}>Notify!</button>
+        <ToastContainer
+          position="top-right"
+          autoClose={1500}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={true}
+          pauseOnHover={true}
+          theme="light"
+        />
+      </div>
       <PopUp title={"Add Author"} isOpen={isOpen} setIsOpen={setIsOpen}>
         <form onSubmit={onSubmit}>
           <label>Name</label>
