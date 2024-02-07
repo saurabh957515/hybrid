@@ -2,23 +2,17 @@
 
 const express = require("express");
 const router = express.Router();
-const path = require("path");
 const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
-
-const storageEngine = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "public", "images")); // Destination directory
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}--${file.originalname}`); // File naming
-  },
-});
-
 const upload = multer({ dest: "public/images" });
 
 router.get("/", async (req, res) => {
+  let authorOptions = await Author?.find();
+  authorOptions = authorOptions.map((author) => ({
+    label: author?.name,
+    value: author?._id,
+  }));
   let query = Book.find();
   if (req.query.title) {
     query = query.regex("title", new RegExp(req.query.title, "i"));
@@ -34,7 +28,7 @@ router.get("/", async (req, res) => {
     const books = await query.exec();
     res.send({
       books: books,
-      searchOptions: req.query,
+      searchOptions: authorOptions,
     });
   } catch (error) {
     console.error(error);

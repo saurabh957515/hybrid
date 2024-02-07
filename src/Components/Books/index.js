@@ -1,10 +1,12 @@
+/** @format */
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import _ from "lodash";
 import Layout from "../Layout";
 export default function Index() {
   const [books, setBooks] = useState([]);
+  const [authorOptions, setAuthorOptions] = useState([]);
   const [Errors, setErrors] = useState([]);
   useEffect(() => {
     getData();
@@ -24,6 +26,7 @@ export default function Index() {
         } else {
           // Handle successful response
           setBooks(res.data.books);
+          setAuthorOptions(res.data?.searchOptions);
           setErrors({});
         }
       })
@@ -31,12 +34,18 @@ export default function Index() {
         console.error("Error:", error);
       });
   }
+
+  console.log(authorOptions);
   return (
     <div>
       <Layout />
+
       <div className="grid grid-cols-3">
-        {books?.map((book) => (
-          <div>HELo</div>
+        {books?.map((book, index) => (
+          <div key={index}>
+            HELo
+            <img src={`http://localhost:5000/${book?.coverImage}`} />
+          </div>
         ))}
       </div>
 
