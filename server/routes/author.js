@@ -15,7 +15,6 @@ router.get("/", async (req, res) => {
   }
   try {
     const authors = await Author.find(searchOptions);
-    console.log("new auhtor", authors);
     res.send({
       authors: authors,
       searchOptions: req.query,
@@ -35,7 +34,6 @@ router.get("/new", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log(req.body.name);
   const author = new Author({
     name: req.body.name,
   });

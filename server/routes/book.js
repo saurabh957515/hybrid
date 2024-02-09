@@ -31,13 +31,11 @@ router.get("/", async (req, res) => {
       searchOptions: authorOptions,
     });
   } catch (error) {
-    console.error(error);
     res.send(error);
   }
 });
 
 router.post("/", upload.single("coverImage"), async (req, res) => {
-  console.log(req?.file?.filename);
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
@@ -88,7 +86,6 @@ router.put("/:id", upload.single("coverImage"), async (req, res) => {
 
 // Delete Book Page
 router.delete("/:id", async (req, res) => {
-  console.log("i am comming");
   let book;
   try {
     book = await Book.findById(req.params.id);
