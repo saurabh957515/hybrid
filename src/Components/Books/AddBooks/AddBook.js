@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../Layout";
 import TextInput from "../../Fileds/TextInput";
 import ReactSelect from "../../Fileds/ReactSelect";
@@ -8,7 +8,15 @@ import _ from "lodash";
 import axios from "axios";
 import PrimaryButton from "../../Fileds/PrimaryButton";
 import InputError from "../../Fileds/InputError";
-const AddBook = ({ authorOptions }) => {
+import moment from "moment";
+const AddBook = ({
+  authorOptions,
+  editBook,
+  isEdit,
+  selectedBook,
+  isBookAdd,
+  onClose,
+}) => {
   const [errors, setErrors] = useState({});
   const [book, setBook] = useState({
     title: "",
@@ -19,6 +27,24 @@ const AddBook = ({ authorOptions }) => {
     description: "",
   });
 
+  useEffect(() => {
+    if (isEdit) {
+      setBook({
+        ...selectedBook,
+        publishDate: moment(selectedBook?.publishDate).format("YYYY-MM-DD"),
+      });
+    } else {
+      setBook({
+        title: "",
+        author: "",
+        publishDate: "",
+        pageCount: "",
+        coverImage: "",
+        description: "",
+      });
+    }
+  }, [selectedBook, isBookAdd]);
+
   const handleBook = (name, value) => {
     let newBook = _.cloneDeep(book);
     newBook[name] = value;
@@ -27,42 +53,52 @@ const AddBook = ({ authorOptions }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", book.title);
-    formData.append("author", book.author);
-    formData.append("publishDate", book.publishDate);
-    formData.append("pageCount", book.pageCount);
-    formData.append("coverImage", book.coverImage); // Append file object
-    formData.append("description", book.description);
-
-    axios
-      .post("/book", formData)
-      .then((res) => {
-        if (res.data.errors) {
-          setErrors(() => {
-            let newErrors = {};
-            _.forIn(res.data.errors, function (value, key) {
-              newErrors[key] = value.message;
+    if (isEdit) {
+      const formData = new FormData();
+      formData.append("title", book.title);
+      formData.append("author", book.author);
+      formData.append("publishDate", book.publishDate);
+      formData.append("pageCount", book.pageCount);
+      formData.append("coverImage", book.coverImage); // Append file object
+      formData.append("description", book.description);
+      editBook(book?._id, formData);
+    } else {
+      const formData = new FormData();
+      formData.append("title", book.title);
+      formData.append("author", book.author);
+      formData.append("publishDate", book.publishDate);
+      formData.append("pageCount", book.pageCount);
+      formData.append("coverImage", book.coverImage); // Append file object
+      formData.append("description", book.description);
+      axios
+        .post("/book", formData)
+        .then((res) => {
+          if (res.data.errors) {
+            setErrors(() => {
+              let newErrors = {};
+              _.forIn(res.data.errors, function (value, key) {
+                newErrors[key] = value.message;
+              });
+              return newErrors;
             });
-            return newErrors;
-          });
-        } else {
-          // Handle successful response
-          setBook(res.data);
-          setErrors({});
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+          } else {
+            // Handle successful response
+            setBook(res.data);
+            setErrors({});
+            onClose();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     handleBook("coverImage", file);
   };
-  console.log(book);
-
+  console.log(book, authorOptions);
   return (
     <div>
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
@@ -81,10 +117,11 @@ const AddBook = ({ authorOptions }) => {
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Author
           </label>
+
           <ReactSelect
             options={authorOptions}
             value={book?.author}
-            handleChange={(e) => handleBook(e.target.name, e.target.value)}
+            onChange={(e) => handleBook("author", e?.value)}
             name="author"
           />
           <InputError message={errors?.author} />

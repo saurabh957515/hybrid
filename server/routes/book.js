@@ -36,9 +36,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/new", async (req, res) => {
-  renderNewPage(res, new Book());
-});
 router.post("/", upload.single("coverImage"), async (req, res) => {
   console.log(req?.file?.filename);
   const book = new Book({
@@ -71,18 +68,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Edit Book Route
-router.get("/:id/edit", async (req, res) => {
-  try {
-    const book = await Book.findById(req.params.id);
-    renderEditPage(res, book);
-  } catch {
-    res.redirect("/");
-  }
-});
-// one comment added in master
 // Update Book Route
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("coverImage"), async (req, res) => {
   let book;
 
   try {
@@ -92,67 +79,25 @@ router.put("/:id", async (req, res) => {
     book.publishDate = new Date(req.body.publishDate);
     book.pageCount = req.body.pageCount;
     book.description = req.body.description;
-    if (req.body.cover != null && req.body.cover !== "") {
-      saveCover(book, req.body.cover);
-    }
-    await book.save();
-    res.redirect(`/books/${book.id}`);
+    (book.coverImage = req?.file?.filename || null), await book.save();
+    res.send("book updated successfully");
   } catch {
-    if (book != null) {
-      renderEditPage(res, book, true);
-    } else {
-      redirect("/");
-    }
+    res.send("book updated successfully");
   }
 });
 
 // Delete Book Page
 router.delete("/:id", async (req, res) => {
+  console.log("i am comming");
   let book;
   try {
     book = await Book.findById(req.params.id);
     await book.deleteOne();
-    res.redirect("/books");
-  } catch {
-    if (book != null) {
-      res.render("books/show", {
-        book: book,
-        errorMessage: "Could not remove book",
-      });
-    } else {
-      res.redirect("/");
-    }
+    res.send("books deleted successfully");
+  } catch (error) {
+    res.send({ errors: error });
   }
 });
 // one  comment added
-async function renderNewPage(res, book, hasError = false) {
-  renderFormPage(res, book, "new", hasError);
-}
-
-async function renderEditPage(res, book, hasError = false) {
-  renderFormPage(res, book, "edit", hasError);
-}
-
-async function renderFormPage(res, book, form, hasError = false) {
-  try {
-    const authors = await Author.find({});
-    const params = {
-      authors: authors,
-      book: book,
-    };
-
-    if (hasError) {
-      params.errorMessage = hasError;
-    }
-    if (form === "edit") {
-      res.render(`books/${form}`, params);
-    } else {
-      res.render("books/new", params);
-    }
-  } catch (error) {
-    console.log("i will not come");
-    res.redirect("/books");
-  }
-}
 
 module.exports = router;
