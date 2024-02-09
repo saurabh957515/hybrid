@@ -77,16 +77,9 @@ router.put("/:id", async (req, res) => {
     author = await Author.findById(req.params.id);
     author.name = req.body.name;
     await author.save();
-    res.redirect(`/authors/${author.id}`);
-  } catch {
-    if (author == null) {
-      res.redirect("/");
-    } else {
-      res.render("authors/edit", {
-        author: author,
-        errorMessage: "Error updating Author",
-      });
-    }
+    res.redirect(`author updated.`);
+  } catch (error) {
+    res.send(error);
   }
 });
 
@@ -95,16 +88,9 @@ router.delete("/:id", async (req, res) => {
   try {
     author = await Author.findById(req.params.id);
     await author.deleteOne();
-    res.redirect("/authors");
+    res.send("Authors Deleted SuccessFully");
   } catch (error) {
-    console.log(error, author == null);
-    if (author == null) {
-      res.redirect("/");
-    } else {
-      res.redirect(
-        `/authors/${author.id}?errorMessage=Error%20deleting%20author`
-      );
-    }
+    res.send(error);
   }
 });
 module.exports = router;
