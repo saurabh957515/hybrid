@@ -6,32 +6,62 @@ import axios from "axios";
 import PopUp from "../Fileds/PopUp";
 import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Index() {
   const [authors, setAuthors] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isEdit, setIsEdit] = useState();
+  const [selectedAuthor, setSelectedAuthor] = useState({});
+  const notify = () => toast.success("Success Notification !", {});
+  // make the new page where user can change the authors and book and customize both and get the books according to eachOthers
   const [authorName, setAuthorName] = useState("");
 
   function onSubmit(e) {
     e.preventDefault();
-    axios
-      .post("/author", { name: authorName })
-      .then((res) => console.log(res, res.data));
+    if (isEdit) {
+      axios
+        .put(`/author/${selectedAuthor?._id}`)
+        .then((res) => console.log(res.data));
+      setIsEdit(false);
+    } else {
+      axios.post("/author", { name: authorName });
+      setIsOpen(false);
+      toast.success("Author Successfully Saved !", {});
+      setAuthorName("");
+    }
   }
-
-  useEffect(() => {
+  function getAuthors() {
     axios.get("/author").then((res) => setAuthors(res.data.authors));
+  }
+  async function deleteAuthor(id) {
+    const data = await axios.delete(`/author/${id}`);
+    getAuthors();
+    setAuthorName("");
+    toast.success("Author Deleted !!");
+  }
+  useEffect(() => {
+    getAuthors();
   }, [isOpen]);
-  const notify = () => toast("Wow so easy!");
   return (
     <div className="relative">
       <Layout />
       <div className="">
-        {authors?.map((author) => (
-          <div className="my-2 text-lg font-bold text-white bg-blue-400 ">
+        {authors?.map((author, index) => (
+          <div className="w-1/2 mx-auto my-2 text-lg font-bold text-white bg-blue-400 ">
+            <span>{index + 1}</span>
+            <button
+              onClick={() => {
+                setAuthorName(author?.name);
+                setIsOpen(true);
+                setIsEdit(true);
+                setSelectedAuthor(author);
+              }}
+            >
+              Edit
+            </button>
+            <button onClick={() => deleteAuthor(author?._id)}>Delete</button>
             {author?.name}
           </div>
         ))}

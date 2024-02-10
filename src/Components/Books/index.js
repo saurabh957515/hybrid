@@ -9,8 +9,10 @@ import AddBook from "./AddBooks/AddBook";
 export default function Index() {
   const [books, setBooks] = useState([]);
   const [isBookAdd, setIsBookAdd] = useState(false);
+  const [selectedBook, setSelectedBook] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
   const [Errors, setErrors] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     getData();
   }, [isBookAdd]);
@@ -37,27 +39,63 @@ export default function Index() {
       });
   }
 
+  async function deleteBook(id) {
+    const data = await axios.delete(`/book/${id}`).then((res) => res?.data);
+    if (data?.errors) {
+    } else {
+      getData();
+    }
+  }
+
+  async function editBook(id, book) {
+    const data = await axios.put(`/book/${id}`, book).then((res) => res?.data);
+    console.log(data);
+    if (data?.errors) {
+    } else {
+      getData();
+      setIsBookAdd(false);
+    }
+  }
+
+  function onClose() {
+    setIsBookAdd((pre) => !pre);
+    setIsEdit(false);
+  }
   return (
     <div>
       <Layout />
 
       <div className="grid grid-cols-3 gap-4">
         {books?.map((book, index) => (
-          <div className="relative w-64 h-64 my-2 " key={index}>
-            <div className="absolute z-50 font-bold opacity-100">
-              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
-              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
-              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
-            </div>
+          <div key={index}>
+            HELo
+            <button onClick={() => deleteBook(book?._id)}>Delete</button>
+            <button
+              onClick={() => {
+                setIsBookAdd(true);
+                setIsEdit(true);
+                setSelectedBook(book);
+              }}
+            >
+              Edit
+            </button>
             <img
-              className="absolute w-64 h-64 max-w-xl rounded-lg opacity-80"
+              className="w-full h-full max-w-xl rounded-lg opacity-80"
               src={`http://localhost:5000/${book?.coverImage}`}
             />{" "}
           </div>
         ))}
       </div>
-      <PopUp title={"Add Book"} setIsOpen={setIsBookAdd} isOpen={isBookAdd}>
-        <AddBook authorOptions={authorOptions} />
+      <PopUp title={"Add Book"} setIsOpen={onClose} isOpen={isBookAdd}>
+        <AddBook
+          onClose={onClose}
+          isBookAdd={isBookAdd}
+          editBook={editBook}
+          isEdit={isEdit}
+          setIsEdit={setIsEdit}
+          selectedBook={selectedBook}
+          authorOptions={authorOptions}
+        />
       </PopUp>
       <button onClick={getData}>GetData</button>
     </div>

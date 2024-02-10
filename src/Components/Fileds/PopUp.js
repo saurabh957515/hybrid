@@ -3,11 +3,15 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
-export default function PopUp({ children, setIsOpen, isOpen,title }) {
-
+export default function PopUp({ children, setIsOpen, isOpen, title }) {
   return (
     <div>
-      <h1 onClick={() => setIsOpen(true)}>{title}</h1>
+      <h1
+        className="text-semibold text-lg z-50 relative text-white"
+        onClick={() => setIsOpen(true)}
+      >
+        {title}
+      </h1>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
           <Transition.Child
