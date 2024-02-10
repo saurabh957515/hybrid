@@ -37,19 +37,22 @@ export default function Index() {
       });
   }
 
-  console.log(authorOptions);
   return (
     <div>
       <Layout />
 
-      <div className="grid grid-cols-3 ">
+      <div className="grid grid-cols-3 gap-4">
         {books?.map((book, index) => (
-          <div key={index}>
-            HELo
+          <div className="relative w-64 h-64 my-2 " key={index}>
+            <div className="absolute z-50 font-bold opacity-100">
+              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
+              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
+              <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ut!</div>
+            </div>
             <img
-              className="w-full h-full max-w-xl rounded-lg"
+              className="absolute w-64 h-64 max-w-xl rounded-lg opacity-80"
               src={`http://localhost:5000/${book?.coverImage}`}
-            />
+            />{" "}
           </div>
         ))}
       </div>

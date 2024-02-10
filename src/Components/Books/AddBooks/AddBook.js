@@ -84,7 +84,7 @@ const AddBook = ({ authorOptions }) => {
           <ReactSelect
             options={authorOptions}
             value={book?.author}
-            handleChange={(e) => handleBook(e.target.name, e.target.value)}
+            onChange={(e) => handleBook("author", e.value)}
             name="author"
           />
           <InputError message={errors?.author} />

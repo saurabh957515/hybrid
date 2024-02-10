@@ -29,9 +29,9 @@ function Index() {
   return (
     <div className="relative">
       <Layout />
-      <div className="flex space-x-4 w-full my-2">
+      <div className="">
         {authors?.map((author) => (
-          <div className="text-lg w-1/2 font-bold text-white bg-blue-400 ">
+          <div className="my-2 text-lg font-bold text-white bg-blue-400 ">
             {author?.name}
           </div>
         ))}
