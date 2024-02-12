@@ -13,7 +13,13 @@ import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Authors";
 import Books from "./Components/Books/Books";
 import "./index.css";
+import { pdfjs } from "react-pdf";
+import PdfComp from "./Components/PdfComp";
 
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/legacy/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "Books",
     element: <Books />,
+  },
+  {
+    path: "pdf",
+    element: <PdfComp />,
   },
 ]);
 

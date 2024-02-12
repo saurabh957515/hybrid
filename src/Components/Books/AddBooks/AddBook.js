@@ -5,10 +5,12 @@ import Layout from "../../Layout";
 import TextInput from "../../Fileds/TextInput";
 import ReactSelect from "../../Fileds/ReactSelect";
 import _ from "lodash";
+
 import axios from "axios";
 import PrimaryButton from "../../Fileds/PrimaryButton";
 import InputError from "../../Fileds/InputError";
 import moment from "moment";
+
 const AddBook = ({
   authorOptions,
   editBook,
@@ -103,7 +105,7 @@ const AddBook = ({
     <div>
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
         <div>
-          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+          <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             Title
           </label>
           <TextInput
@@ -114,7 +116,7 @@ const AddBook = ({
           <InputError message={errors?.title} />
         </div>
         <div>
-          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+          <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             Author
           </label>
 
@@ -126,8 +128,9 @@ const AddBook = ({
           />
           <InputError message={errors?.author} />
         </div>
+
         <div>
-          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+          <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             PublishedDate
           </label>
           <TextInput
@@ -139,7 +142,7 @@ const AddBook = ({
           <InputError message={errors?.publishDate} />
         </div>
         <div>
-          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+          <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             PageCount
           </label>
           <TextInput
@@ -149,17 +152,19 @@ const AddBook = ({
           />
           <InputError message={errors?.pageCount} />
         </div>
-        <div>
-          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
-            CoverImage
-          </label>
-          <input
-            type="file"
-            onChange={handleFileChange} // Handle file change
-            name="coverImage"
-          />
-          <InputError message={errors?.coverImage} />
-        </div>
+        {!isEdit && (
+          <div>
+            <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+              CoverImage
+            </label>
+            <input
+              type="file"
+              onChange={handleFileChange} // Handle file change
+              name="coverImage"
+            />
+            <InputError message={errors?.coverImage} />
+          </div>
+        )}
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Description
