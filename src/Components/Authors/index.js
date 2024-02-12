@@ -17,7 +17,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Disclosure } from "@headlessui/react";
-
+import Books from "../Books/Books";
 
 function Index() {
   const [authors, setAuthors] = useState([]);
@@ -25,7 +25,7 @@ function Index() {
   const [isEdit, setIsEdit] = useState();
   const [error, setError] = useState({});
   const [selectedAuthor, setSelectedAuthor] = useState({});
-  const [book,setBook]=useState({})
+  const [book, setBook] = useState({});
   const notify = () => toast.success("Success Notification !", {});
   // make the new page where user can change the authors and book and customize both and get the books according to eachOthers
   const [authorName, setAuthorName] = useState("");
@@ -69,10 +69,10 @@ function Index() {
       <div className="flex w-full h-[80vh] p-5 ">
         <div className="flex flex-col w-full h-full">
           {authors?.map((author, index) => (
-            <Disclosure defaultOpen={index==0} className="w-full" key={index}>
+            <Disclosure defaultOpen={index == 0} className="w-full" key={index}>
               {({ open }) => (
                 <>
-                  <Disclosure.Button >
+                  <Disclosure.Button>
                     <div className="mx-auto text-lg font-bold text-white bg-blue-400 ">
                       <div className="flex justify-between w-full">
                         <span>
@@ -99,24 +99,18 @@ function Index() {
                       {error[`${author?.name}`]}
                     </div>
                   </Disclosure.Button>
-                  <Disclosure.Panel className="flex">{
-                  author?.books?.map(book=>
-                    <div key={book?._id}>
-                   <Link  to="/Books">
-                    Edit
-                   </Link>
-                    <img
-                      className="w-full h-full max-w-xl rounded-lg opacity-80"
-                      src={`http://localhost:5000/${book?.coverImage}`}
-                    />{" "}
-                  </div>
-               )}</Disclosure.Panel>
+                  <Disclosure.Panel className="flex">
+                    {author?.books?.map((book) => (
+                      <div key={book?._id}>
+                        <Books searchAuthor={author?._id} />{" "}
+                      </div>
+                    ))}
+                  </Disclosure.Panel>
                 </>
               )}
             </Disclosure>
           ))}
         </div>
-      
       </div>
       Authors
       <div>

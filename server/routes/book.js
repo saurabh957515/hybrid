@@ -5,15 +5,20 @@ const router = express.Router();
 const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
+const { queryByRole } = require("@testing-library/react");
 const upload = multer({ dest: "public/images" });
 
 router.get("/", async (req, res) => {
+
   let authorOptions = await Author?.find();
   authorOptions = authorOptions.map((author) => ({
     label: author?.name,
     value: author?._id,
   }));
-  let query = Book.find().populate("author");
+  let query = Book.find();
+  if (req.query.author) {
+    query = Book.find({ author: req.query.author });
+  }
   if (req.query.title) {
     query = query.regex("title", new RegExp(req.query.title, "i"));
   }
@@ -26,6 +31,7 @@ router.get("/", async (req, res) => {
 
   try {
     const books = await query.exec();
+    console.log;
     res.send({
       books: books,
       searchOptions: authorOptions,

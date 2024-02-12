@@ -6,8 +6,9 @@ import _ from "lodash";
 import Layout from "../Layout";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
-export default function Index({ oldbooks = [] }) {
+export default function Books({ oldbooks = [], searchAuthor = "" }) {
   const [books, setBooks] = useState(oldbooks);
+  const [searchOptions, setSearchOptions] = useState(searchAuthor);
   const [isBookAdd, setIsBookAdd] = useState(false);
   const [selectedBook, setSelectedBook] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
@@ -18,7 +19,11 @@ export default function Index({ oldbooks = [] }) {
   }, [isBookAdd]);
   function getData() {
     axios
-      .get("/book")
+      .get("/book", {
+        params: {
+          author: searchAuthor,
+        },
+      })
       .then((res) => {
         if (res.data.errors) {
           setErrors(() => {
@@ -64,7 +69,6 @@ export default function Index({ oldbooks = [] }) {
   return (
     <div>
       <Layout />
-
       <div className="grid grid-cols-3 gap-4">
         {books?.map((book, index) => (
           <div key={index}>

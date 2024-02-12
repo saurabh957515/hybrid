@@ -11,7 +11,7 @@ import {
 import "./index.css";
 import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Index";
-import Books from "./Components/Books/Index";
+import Books from "./Components/Books/Books";
 import "./index.css";
 
 const router = createBrowserRouter([
