@@ -6,7 +6,7 @@ import _ from "lodash";
 import Layout from "../Layout";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
-export default function Books({ oldbooks = [], searchAuthor = "" }) {
+export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const [books, setBooks] = useState(oldbooks);
   const [searchOptions, setSearchOptions] = useState(searchAuthor);
   const [isBookAdd, setIsBookAdd] = useState(false);
@@ -68,7 +68,7 @@ export default function Books({ oldbooks = [], searchAuthor = "" }) {
   }
   return (
     <div>
-      <Layout />
+      {!isAuthor && <Layout />}
       <div className="grid grid-cols-3 gap-4">
         {books?.map((book, index) => (
           <div key={index}>

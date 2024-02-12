@@ -19,7 +19,7 @@ import {
 import { Disclosure } from "@headlessui/react";
 import Books from "../Books/Books";
 
-function Index() {
+function Authors() {
   const [authors, setAuthors] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState();
@@ -102,7 +102,7 @@ function Index() {
                   <Disclosure.Panel className="flex">
                     {author?.books?.map((book) => (
                       <div key={book?._id}>
-                        <Books searchAuthor={author?._id} />{" "}
+                        <Books isAuthor={true} searchAuthor={author?._id} />{" "}
                       </div>
                     ))}
                   </Disclosure.Panel>
@@ -142,4 +142,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Authors;
