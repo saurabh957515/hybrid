@@ -8,23 +8,36 @@ import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
 import { ToastContainer, toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+
 
 function Index() {
   const [authors, setAuthors] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState();
+  const [error, setError] = useState({});
   const [selectedAuthor, setSelectedAuthor] = useState({});
+  const [book,setBook]=useState({})
   const notify = () => toast.success("Success Notification !", {});
   // make the new page where user can change the authors and book and customize both and get the books according to eachOthers
   const [authorName, setAuthorName] = useState("");
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (isEdit) {
-      axios
-        .put(`/author/${selectedAuthor?._id}`)
+      const data = await axios
+        .put(`/author/${selectedAuthor?._id}`, { name: authorName })
         .then((res) => console.log(res.data));
       setIsEdit(false);
+      setIsOpen(false);
     } else {
       axios.post("/author", { name: authorName });
       setIsOpen(false);
@@ -37,34 +50,73 @@ function Index() {
   }
   async function deleteAuthor(id) {
     const data = await axios.delete(`/author/${id}`);
-    getAuthors();
-    setAuthorName("");
-    toast.success("Author Deleted !!");
+    if (data?.data?.errors) {
+      setError(data?.data?.errors);
+    } else {
+      getAuthors();
+      setAuthorName("");
+      toast.success("Author Deleted !!");
+    }
   }
   useEffect(() => {
     getAuthors();
   }, [isOpen]);
+
+  console.log(book);
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <Layout />
-      <div className="">
-        {authors?.map((author, index) => (
-          <div className="w-1/2 mx-auto my-2 text-lg font-bold text-white bg-blue-400 ">
-            <span>{index + 1}</span>
-            <button
-              onClick={() => {
-                setAuthorName(author?.name);
-                setIsOpen(true);
-                setIsEdit(true);
-                setSelectedAuthor(author);
-              }}
-            >
-              Edit
-            </button>
-            <button onClick={() => deleteAuthor(author?._id)}>Delete</button>
-            {author?.name}
-          </div>
-        ))}
+      <div className="flex w-full h-[80vh] p-5 ">
+        <div className="flex flex-col w-full h-full">
+          {authors?.map((author, index) => (
+            <Disclosure defaultOpen={index==0} className="w-full" key={index}>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button >
+                    <div className="mx-auto text-lg font-bold text-white bg-blue-400 ">
+                      <div className="flex justify-between w-full">
+                        <span>
+                          {index + 1} {author?.name}
+                        </span>
+                        <div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAuthorName(author?.name);
+                              setIsOpen(true);
+                              setIsEdit(true);
+                              setSelectedAuthor(author);
+                            }}
+                          >
+                            <PencilSquareIcon className="w-6 h-6 text-gray-900" />
+                          </button>
+                          <button onClick={() => deleteAuthor(author?._id)}>
+                            <TrashIcon className="w-6 h-6 text-gray-900 " />
+                          </button>
+                        </div>
+                      </div>
+
+                      {error[`${author?.name}`]}
+                    </div>
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="flex">{
+                  author?.books?.map(book=>
+                    <div key={book?._id}>
+                   <Link  to="/Books">
+                    Edit
+                   </Link>
+                    <img
+                      className="w-full h-full max-w-xl rounded-lg opacity-80"
+                      src={`http://localhost:5000/${book?.coverImage}`}
+                    />{" "}
+                  </div>
+               )}</Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          ))}
+        </div>
+      
       </div>
       Authors
       <div>

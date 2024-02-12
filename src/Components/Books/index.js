@@ -6,8 +6,8 @@ import _ from "lodash";
 import Layout from "../Layout";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
-export default function Index() {
-  const [books, setBooks] = useState([]);
+export default function Index({ oldbooks = [] }) {
+  const [books, setBooks] = useState(oldbooks);
   const [isBookAdd, setIsBookAdd] = useState(false);
   const [selectedBook, setSelectedBook] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
@@ -29,6 +29,7 @@ export default function Index() {
             return newErrors;
           });
         } else {
+          console.log(res.data.books);
           setBooks(res.data.books);
           setAuthorOptions(res.data?.searchOptions);
           setErrors({});
@@ -49,7 +50,6 @@ export default function Index() {
 
   async function editBook(id, book) {
     const data = await axios.put(`/book/${id}`, book).then((res) => res?.data);
-    console.log(data);
     if (data?.errors) {
     } else {
       getData();

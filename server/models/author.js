@@ -3,12 +3,20 @@
 const mongoose = require("mongoose");
 const Book = require("./book");
 
-const authorSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const authorSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    books: [
+      { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Book" },
+    ],
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 authorSchema.pre("deleteOne", { document: true }, async function (next) {
   try {

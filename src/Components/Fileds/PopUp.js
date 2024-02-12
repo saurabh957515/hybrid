@@ -7,7 +7,7 @@ export default function PopUp({ children, setIsOpen, isOpen, title }) {
   return (
     <div>
       <h1
-        className="text-semibold text-lg z-50 relative text-white"
+        className="relative z-50 text-lg text-semibold "
         onClick={() => setIsOpen(true)}
       >
         {title}
@@ -23,11 +23,11 @@ export default function PopUp({ children, setIsOpen, isOpen, title }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 sm:p-0">
+            <div className="flex items-center justify-center min-h-full p-4 sm:p-0">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"

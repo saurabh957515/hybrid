@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     label: author?.name,
     value: author?._id,
   }));
-  let query = Book.find();
+  let query = Book.find().populate("author");
   if (req.query.title) {
     query = query.regex("title", new RegExp(req.query.title, "i"));
   }
@@ -44,15 +44,16 @@ router.post("/", upload.single("coverImage"), async (req, res) => {
     description: req.body.description,
     coverImage: req?.file?.filename || null,
   });
+  const author = await Author.findById(req.body.author);
+  author.books.push(book._id);
+
+  // Save the updated author document
+  await author.save();
   try {
     const newBook = await book.save();
     res.send(newBook);
   } catch (error) {
     res.send(error);
-    // if (req.file) {
-    //   fs.unlink(path.join(__dirname, "public/images", req?.file?.filename));
-    // }
-    // renderNewPage(res, book, error);
   }
 });
 

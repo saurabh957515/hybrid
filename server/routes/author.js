@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     searchOptions.name = req.query.name;
   }
   try {
-    const authors = await Author.find(searchOptions);
+    const authors = await Author.find(searchOptions).populate("books");
     res.send({
       authors: authors,
       searchOptions: req.query,
@@ -75,7 +75,7 @@ router.put("/:id", async (req, res) => {
     author = await Author.findById(req.params.id);
     author.name = req.body.name;
     await author.save();
-    res.redirect(`author updated.`);
+    res.send(`author updated.`);
   } catch (error) {
     res.send(error);
   }
@@ -88,7 +88,10 @@ router.delete("/:id", async (req, res) => {
     await author.deleteOne();
     res.send("Authors Deleted SuccessFully");
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.send({
+      errors: { [author?.name]: "This Author still has book" },
+    });
   }
 });
 module.exports = router;
