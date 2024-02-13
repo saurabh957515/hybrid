@@ -9,25 +9,30 @@ const { queryByRole } = require("@testing-library/react");
 const upload = multer({ dest: "public/images" });
 
 router.get("/", async (req, res) => {
-
+  const { dateOptions, title, author } = req.query;
   let authorOptions = await Author?.find();
   authorOptions = authorOptions.map((author) => ({
     label: author?.name,
     value: author?._id,
   }));
+
   let query = Book.find();
-  if (req.query.author) {
-    query = Book.find({ author: req.query.author });
+  console.log(dateOptions?.startDate === dateOptions?.endDate);
+  if (dateOptions?.startDate === dateOptions?.endDate) {
+    query = Book.find({
+      publishDate: {
+        $eq: dateOptions?.endDate,
+      },
+    });
+  } else if (dateOptions?.endDate) {
+    // query = query.lte("publishDate", dateOptions?.endDate);
   }
-  if (req.query.title) {
-    query = query.regex("title", new RegExp(req.query.title, "i"));
-  }
-  if (req.query.publishedBefore) {
-    query = query.lte("publishDate", req.query.publishedBefore);
-  }
-  if (req.query.publishedAfter) {
-    query = query.lte("publishDate", req.query.publishedAfter);
-  }
+  // if (author) {
+  //   query = Book.find({ author: author });
+  // }
+  // if (title) {
+  //   query = query.regex("title", new RegExp(req.query.title, "i"));
+  // }
 
   try {
     const books = await query.exec();
