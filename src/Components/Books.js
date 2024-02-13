@@ -29,7 +29,6 @@ function Books() {
   return (
     <div>
       Good book by me
-
       <button onClick={getData}>GetData</button>
     </div>
   );

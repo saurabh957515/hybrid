@@ -8,7 +8,9 @@ import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
 import TextInput from "../Fileds/TextInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Datepicker from "tailwind-datepicker-react";
 import { get } from "lodash";
+import { Menu, MenuButton, MenuItem, MenuItems, Popover, PopoverButton, PopoverOverlay, PopoverPanel } from "@headlessui/vue";
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const [books, setBooks] = useState(oldbooks);
   const [searchOptions, setSearchOptions] = useState({
@@ -68,29 +70,60 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     setIsBookAdd((pre) => !pre);
     setIsEdit(false);
   }
+  const [show, setShow] = useState(false);
+  const handleChange = (selectedDate) => {
+    console.log(selectedDate);
+  };
+  const handleClose = (state) => {
+    setShow(state);
+  };
+
   return (
     <div>
-      {!isAuthor && <Layout />}
+                  {!isAuthor && <Layout />}
+      <div className="w-3/4 mx-auto">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            getData();
+          }}
+          className="flex items-center w-full px-8 space-x-2"
+        >
+          <div>
+            
+    
+          </div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          getData();
-        }}
-        class="flex items-center"
-      >
-        <label for="simple-search" class="sr-only">
-          Search
-        </label>
-        <div class="relative w-full">
-          <FunnelIcon className="h-5 w-5" />
-          <TextInput
-            handleChange={(e) => {
-              setSearchOptions((pre) => ({ ...pre, title: e.target.value }));
-            }}
-            value={searchOptions?.title}
-          />
-          <TextInput
+          <div className="items-center">
+            <Datepicker
+              onChange={handleChange}
+              show={show}
+              setShow={handleClose}
+            />
+          </div>
+          <div class="pt-2 relative grow text-gray-600">
+            <TextInput
+              value={searchOptions?.publishedBefore}
+              handleChange={(e) =>
+                setSearchOptions((pre) => ({
+                  ...pre,
+                  publishedBefore: e.target.value,
+                }))
+              }
+              className="h-10 px-5 pr-16 border-2 border-gray-300 rounded-lg focus:outline-none"
+              type="search"
+              placeholder="Search"
+            />
+            <button type="submit" className="absolute top-0 right-0 mt-5 mr-4">
+              <MagnifyingGlassIcon
+                onClick={(e) => {
+                  getData();
+                }}
+                className="w-5 h-5"
+              />
+            </button>
+          </div>
+          {/* <TextInput
             value={searchOptions?.publishedBefore}
             handleChange={(e) =>
               setSearchOptions((pre) => ({
@@ -99,23 +132,15 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               }))
             }
             type="date"
-          />
-          <div>
-            <MagnifyingGlassIcon
-              onClick={(e) => {
-                getData();
-              }}
-              className="h-5 w-5"
-            />
-            dfs
-          </div>
-        </div>
-      </form>
+          /> */}
+        </form>
+      </div>
 
       <div className="grid grid-cols-4 gap-x-4">
         {books?.map((book, index) => (
           <div key={index}>
             HELo{console.log(book)}
+            <p className="">{book?.title}</p>
             <button onClick={() => deleteBook(book?._id)}>Delete</button>
             <button
               onClick={() => {
@@ -127,7 +152,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               Edit
             </button>
             <img
-              className=" max-w-xl rounded-lg opacity-80 object-cover h-96 w-full"
+              className="object-cover w-full max-w-xl rounded-lg opacity-80 h-96"
               src={`http://localhost:5000/${book?.coverImage}`}
             />{" "}
           </div>

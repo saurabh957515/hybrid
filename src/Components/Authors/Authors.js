@@ -100,11 +100,9 @@ function Authors() {
                     </div>
                   </Disclosure.Button>
                   <Disclosure.Panel className="flex">
-                    {author?.books?.map((book) => (
                       <div key={book?._id}>
                         <Books isAuthor={true} searchAuthor={author?._id} />{" "}
                       </div>
-                    ))}
                   </Disclosure.Panel>
                 </>
               )}
