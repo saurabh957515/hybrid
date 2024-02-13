@@ -16,16 +16,27 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const [searchOptions, setSearchOptions] = useState({
     title: "",
     author: searchAuthor,
+    dateOptions: {
+      startDate: new Date(),
+      endDate: new Date(),
+    },
   });
   const [isBookAdd, setIsBookAdd] = useState(false);
   const [selectedBook, setSelectedBook] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
   const [Errors, setErrors] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [show, setShow] = useState(false);
+  const [dateOptions, setDateOptions] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
   useEffect(() => {
     getData();
   }, [isBookAdd]);
+
   function getData() {
+    console.log(searchOptions);
     axios
       .get("/book", {
         params: searchOptions,
@@ -70,22 +81,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     setIsBookAdd((pre) => !pre);
     setIsEdit(false);
   }
-  const [show, setShow] = useState(false);
-  const handleChange = (selectedDate) => {
-    console.log(selectedDate);
-  };
-  const handleClose = (state) => {
-    setShow(state);
-  };
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11),
-  });
-
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
-    setValue(newValue);
-  };
 
   return (
     <div>
@@ -124,20 +119,25 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
 
           <div className="items-center w-full">
             <Datepicker
-              useRange={true}
+              useRange={false}
               asSingle={false}
               inputClassName="border w-full py-1.5 pr-10 px-2 rounded-lg"
-              value={value}
-              onChange={handleValueChange}
+              value={dateOptions}
+              onChange={(date) => {
+                setSearchOptions((pre) => ({
+                  ...pre,
+                  dateOptions: date,
+                }));
+              }}
             />
           </div>
-          <div class="pt-2 relative grow text-gray-600">
+          <div className="pt-2 relative grow text-gray-600">
             <TextInput
               value={searchOptions?.publishedBefore}
               handleChange={(e) =>
                 setSearchOptions((pre) => ({
                   ...pre,
-                  publishedBefore: e.target.value,
+                  title: e.target.value,
                 }))
               }
               className="h-10 px-5 pr-16 border-1 border-gray-300 rounded-lg focus:outline-none"
@@ -153,23 +153,13 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               />
             </button>
           </div>
-          {/* <TextInput
-            value={searchOptions?.publishedBefore}
-            handleChange={(e) =>
-              setSearchOptions((pre) => ({
-                ...pre,
-                publishedBefore: e.target.value,
-              }))
-            }
-            type="date"
-          /> */}
         </form>
       </div>
 
       <div className="grid grid-cols-4 gap-x-4 bg-white dark:bg-gray-800  dark:text-white text-gray-900">
         {books?.map((book, index) => (
           <div key={index}>
-            HELo{console.log(book)}
+            HELo
             <p className="">{book?.title}</p>
             <button onClick={() => deleteBook(book?._id)}>Delete</button>
             <button

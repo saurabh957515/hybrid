@@ -42,7 +42,6 @@ function Layout() {
       }
     });
   }
-  console.log(theme);
   return (
     <div className="relative">
       <Disclosure
