@@ -1,30 +1,29 @@
 /**
  * @format
- * @type {import('tailwindcss').Config}
  */
 
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/tailwind-datepicker-react/dist/**/*.js",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
-
   theme: {
     extend: {
       colors: {
-        celeriterBlue: {
+        BookBlue: {
           400: "#36A2EB",
         },
-        celeriterGreen: {
+        BookGreen: {
           400: "#4BC0C0",
         },
-        celeriterRed: {
+        BookRed: {
           400: "#FF5733",
         },
-        celeriterYellow: {
+        BookYellow: {
           400: "#FFCD56",
         },
-        celeriterOrange: {
+        BookOrange: {
           400: "#F1AFE6",
         },
       },

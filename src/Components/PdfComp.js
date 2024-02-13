@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Document, Page } from "react-pdf";
 import pdf from "./Resume.pdf";
+import CustomPicker from "./CustomPicker";
 export default function PdfComp() {
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
@@ -13,7 +14,7 @@ export default function PdfComp() {
 
   return (
     <div>
-      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+      {/* <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
         {Array?.apply(null, Array(numPages))
           .map((x, i) => i + 1)
           .map((page) => (
@@ -26,7 +27,8 @@ export default function PdfComp() {
       </Document>
       <p>
         Page {pageNumber} of {numPages}
-      </p>
+      </p> */}
+      <CustomPicker />
     </div>
   );
 }

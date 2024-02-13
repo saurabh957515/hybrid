@@ -8,8 +8,7 @@ import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
 import TextInput from "../Fileds/TextInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import Datepicker from "tailwind-datepicker-react";
-import { get } from "lodash";
+import Datepicker from "react-tailwindcss-datepicker";
 import { Popover, Transition } from "@headlessui/react";
 
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
@@ -78,49 +77,58 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const handleClose = (state) => {
     setShow(state);
   };
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date().setMonth(11),
+  });
+
+  const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
+  };
 
   return (
     <div>
-                  {!isAuthor && <Layout />}
-      <div className="w-3/4 mx-auto">
+      {!isAuthor && <Layout />}
+      <div className="w-3/4 mx-auto bg-white dark:bg-gray-800">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             getData();
           }}
-          className="flex items-center w-full px-8 space-x-2"
+          className="flex items-center w-full px-8 space-x-2 "
         >
           <div>
-            
-          <Popover className="relative">
-      <Popover.Button>Solutions</Popover.Button>
-      <Transition
-        enter="transition duration-100 ease-out"
-        enterFrom="transform scale-95 opacity-0"
-        enterTo="transform scale-100 opacity-100"
-        leave="transition duration-75 ease-out"
-        leaveFrom="transform scale-100 opacity-100"
-        leaveTo="transform scale-95 opacity-0"
-      >
-      <Popover.Panel className="absolute z-10">
-        <div className="grid grid-cols-2">
-          <a href="/analytics">Analytics</a>
-          <a href="/engagement">Engagement</a>
-          <a href="/security">Security</a>
-          <a href="/integrations">Integrations</a>
-        </div>
-
-        <img src="/solutions.jpg" alt="" />
-      </Popover.Panel>
-      </Transition>
-    </Popover>
+            <Popover className="relative">
+              <Popover.Button>
+                <FunnelIcon className="h-6 w-6" />
+              </Popover.Button>
+              <Transition
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <Popover.Panel className="absolute z-10 ">
+                  <div className="bg-white dark:bg-gray-800 text-black p-2 w-44 flex flex-col border rounded-lg border-gray-300">
+                    <div>By the Range</div>
+                    <div>By the AfterDate</div>
+                    <div>By the BeforeDate</div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
           </div>
 
-          <div className="items-center">
+          <div className="items-center w-full">
             <Datepicker
-              onChange={handleChange}
-              show={show}
-              setShow={handleClose}
+              useRange={true}
+              asSingle={false}
+              inputClassName="border w-full py-1.5 pr-10 px-2 rounded-lg"
+              value={value}
+              onChange={handleValueChange}
             />
           </div>
           <div class="pt-2 relative grow text-gray-600">
@@ -132,7 +140,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                   publishedBefore: e.target.value,
                 }))
               }
-              className="h-10 px-5 pr-16 border-2 border-gray-300 rounded-lg focus:outline-none"
+              className="h-10 px-5 pr-16 border-1 border-gray-300 rounded-lg focus:outline-none"
               type="search"
               placeholder="Search"
             />
@@ -158,7 +166,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
         </form>
       </div>
 
-      <div className="grid grid-cols-4 gap-x-4">
+      <div className="grid grid-cols-4 gap-x-4 bg-white dark:bg-gray-800  dark:text-white text-gray-900">
         {books?.map((book, index) => (
           <div key={index}>
             HELo{console.log(book)}
