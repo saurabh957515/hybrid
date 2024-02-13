@@ -10,7 +10,8 @@ import TextInput from "../Fileds/TextInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Datepicker from "tailwind-datepicker-react";
 import { get } from "lodash";
-import { Menu, MenuButton, MenuItem, MenuItems, Popover, PopoverButton, PopoverOverlay, PopoverPanel } from "@headlessui/vue";
+import { Popover, Transition } from "@headlessui/react";
+
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const [books, setBooks] = useState(oldbooks);
   const [searchOptions, setSearchOptions] = useState({
@@ -91,7 +92,28 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
         >
           <div>
             
-    
+          <Popover className="relative">
+      <Popover.Button>Solutions</Popover.Button>
+      <Transition
+        enter="transition duration-100 ease-out"
+        enterFrom="transform scale-95 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition duration-75 ease-out"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-95 opacity-0"
+      >
+      <Popover.Panel className="absolute z-10">
+        <div className="grid grid-cols-2">
+          <a href="/analytics">Analytics</a>
+          <a href="/engagement">Engagement</a>
+          <a href="/security">Security</a>
+          <a href="/integrations">Integrations</a>
+        </div>
+
+        <img src="/solutions.jpg" alt="" />
+      </Popover.Panel>
+      </Transition>
+    </Popover>
           </div>
 
           <div className="items-center">
