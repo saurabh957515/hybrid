@@ -23,7 +23,7 @@ export default function PopUp({ children, setIsOpen, isOpen, title }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -38,7 +38,7 @@ export default function PopUp({ children, setIsOpen, isOpen, title }) {
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
                 <Dialog.Panel
-                  className={` rounded-lg bg-white px-7 py-6 w-1/2`}
+                  className={`rounded-lg dark:bg-gray-800 bg-white px-7 py-6 w-1/2`}
                 >
                   {children}
                 </Dialog.Panel>

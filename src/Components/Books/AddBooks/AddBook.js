@@ -102,13 +102,14 @@ const AddBook = ({
   };
   console.log(book, authorOptions);
   return (
-    <div>
+    <div className="">
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             Title
           </label>
           <TextInput
+             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.title}
             handleChange={(e) => handleBook("title", e.target.value)}
             name="title"
@@ -121,6 +122,7 @@ const AddBook = ({
           </label>
 
           <ReactSelect
+             className="h-10 text-white border-gray-300 rounded-lg C dark:border-white border-1 focus:outline-none"
             options={authorOptions}
             value={book?.author}
             onChange={(e) => handleBook("author", e?.value)}
@@ -134,6 +136,7 @@ const AddBook = ({
             PublishedDate
           </label>
           <TextInput
+             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.publishDate}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             type="date"
@@ -146,6 +149,7 @@ const AddBook = ({
             PageCount
           </label>
           <TextInput
+             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.pageCount}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="pageCount"
@@ -170,6 +174,7 @@ const AddBook = ({
             Description
           </label>
           <TextInput
+             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.description}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="description"

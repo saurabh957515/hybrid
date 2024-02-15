@@ -32,10 +32,9 @@ function CustomPicker() {
   console.log(theme);
 
   return (
-    <div className="dark:bg-black">
+    <div className="">
       <button onClick={handleMode}>Switch</button>
       <Datepicker
-        classNames="bg-white "
         primaryColor={"blue"}
         value={value}
         onChange={handleValueChange}

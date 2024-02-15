@@ -17,22 +17,22 @@ router.get("/", async (req, res) => {
   }));
 
   let query = Book.find();
-  console.log(dateOptions?.startDate === dateOptions?.endDate);
-  if (dateOptions?.startDate === dateOptions?.endDate) {
-    query = Book.find({
-      publishDate: {
-        $eq: dateOptions?.endDate,
-      },
-    });
-  } else if (dateOptions?.endDate) {
-    // query = query.lte("publishDate", dateOptions?.endDate);
+  if (dateOptions?.endDate) {
+    if (dateOptions?.startDate === dateOptions?.endDate) {
+      query = query.where("publishDate").eq(dateOptions?.endDate);
+    } else if (dateOptions?.endDate) {
+      query
+        .where("publishDate")
+        .gte(dateOptions?.startDate)
+        .lte(dateOptions?.endDate);
+    }
   }
-  // if (author) {
-  //   query = Book.find({ author: author });
-  // }
-  // if (title) {
-  //   query = query.regex("title", new RegExp(req.query.title, "i"));
-  // }
+  if (author) {
+    query = query.where("author").eq(author);
+  }
+  if (title) {
+    query = query.regex("title", new RegExp(req.query.title, "i"));
+  }
 
   try {
     const books = await query.exec();
