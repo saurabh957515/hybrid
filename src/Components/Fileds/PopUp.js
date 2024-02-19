@@ -7,7 +7,7 @@ export default function PopUp({ children, setIsOpen, isOpen, title }) {
   return (
     <div>
       <h1
-        className="relative z-50 text-lg text-semibold "
+        className="relative z-50 text-lg text-gray-900 cursor-pointer text-semibold dark:text-white"
         onClick={() => setIsOpen(true)}
       >
         {title}

@@ -23,20 +23,36 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <Layout>
+        <PdfComp />
+      </Layout>
+    ),
   },
   {
     path: "Authors",
-    element: <Authors />,
+    element: (
+      <Layout>
+        <Authors />
+      </Layout>
+    ),
   },
 
   {
     path: "Books",
-    element: <Books />,
+    element: (
+      <Layout>
+        <Books />
+      </Layout>
+    ),
   },
   {
     path: "pdf",
-    element: <PdfComp />,
+    element: (
+      <Layout>
+        <PdfComp />
+      </Layout>
+    ),
   },
 ]);
 

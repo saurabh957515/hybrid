@@ -13,11 +13,13 @@ import { Link } from "react-router-dom";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Disclosure } from "@headlessui/react";
 import Books from "../Books/Books";
+import WhiteButton from "../Fileds/WhiteButton";
 
 function Authors() {
   const [authors, setAuthors] = useState([]);
@@ -62,11 +64,63 @@ function Authors() {
     getAuthors();
   }, [isOpen]);
 
-  console.log(book);
+  //   <div>
+  //   <button onClick={notify}>Notify!</button>
+  //   <ToastContainer
+  //     position="top-right"
+  //     autoClose={1500}
+  //     hideProgressBar={false}
+  //     newestOnTop={true}
+  //     closeOnClick
+  //     rtl={false}
+  //     pauseOnFocusLoss
+  //     draggable={true}
+  //     pauseOnHover={true}
+  //     theme="light"
+  //   />
+  // </div>
   return (
-    <div className="relative h-full">
-      <Layout />
-      <div className="flex w-full h-[80vh] p-5 ">
+    <div className="relative h-full ">
+      <div className=" w-full h-[80vh] p-5 ">
+        <div className="flex items-center justify-between">
+          <form className="flex items-center w-3/4 px-8 mx-auto space-x-2 ">
+            <div className="relative pt-2 text-gray-600 grow">
+              <TextInput
+                className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+                type="search"
+                placeholder="Search"
+              />
+              <button
+                type="submit"
+                className="absolute top-0 right-0 mt-5 mr-4"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5 dark:text-white dark:opacity-80" />
+              </button>
+            </div>
+          </form>
+          <div className="inline-block px-8 text-right">
+            <PopUp
+              title={
+                <WhiteButton className="border-gray-400">
+                  <p className="text-base text-gray-900 dark:text-white">
+                    Add Book
+                  </p>
+                </WhiteButton>
+              }
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            >
+              <form onSubmit={onSubmit}>
+                <label>Name</label>
+                <TextInput
+                  handleChange={(e) => setAuthorName(e.target.value)}
+                  value={authorName}
+                />
+                <PrimaryButton>Submit</PrimaryButton>
+              </form>
+            </PopUp>
+          </div>
+        </div>
         <div className="flex flex-col w-full h-full">
           {authors?.map((author, index) => (
             <Disclosure defaultOpen={index == 0} className="w-full" key={index}>
@@ -100,9 +154,9 @@ function Authors() {
                     </div>
                   </Disclosure.Button>
                   <Disclosure.Panel className="flex">
-                      <div key={book?._id}>
-                        <Books isAuthor={true} searchAuthor={author?._id} />{" "}
-                      </div>
+                    <div key={book?._id}>
+                      <Books isAuthor={true} searchAuthor={author?._id} />{" "}
+                    </div>
                   </Disclosure.Panel>
                 </>
               )}
@@ -110,32 +164,6 @@ function Authors() {
           ))}
         </div>
       </div>
-      Authors
-      <div>
-        <button onClick={notify}>Notify!</button>
-        <ToastContainer
-          position="top-right"
-          autoClose={1500}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable={true}
-          pauseOnHover={true}
-          theme="light"
-        />
-      </div>
-      <PopUp title={"Add Author"} isOpen={isOpen} setIsOpen={setIsOpen}>
-        <form onSubmit={onSubmit}>
-          <label>Name</label>
-          <TextInput
-            handleChange={(e) => setAuthorName(e.target.value)}
-            value={authorName}
-          />
-          <PrimaryButton>Submit</PrimaryButton>
-        </form>
-      </PopUp>
     </div>
   );
 }
