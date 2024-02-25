@@ -16,10 +16,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const navigation = [
-  { name: " MyLibrary", to: "/", current: true },
+  { name: "Books", to: "/books", current: true },
   { name: "Authors", to: "/authors", current: false },
   { name: "Books", to: "/books", current: false },
-  { name: "Calendar", to: "#", current: false },
+  { name: "Start...", to: "/readbook", current: false },
 ];
 
 function Layout({ children }) {

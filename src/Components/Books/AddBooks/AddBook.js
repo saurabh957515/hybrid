@@ -10,6 +10,7 @@ import axios from "axios";
 import PrimaryButton from "../../Fileds/PrimaryButton";
 import InputError from "../../Fileds/InputError";
 import moment from "moment";
+import Datepicker from "react-tailwindcss-datepicker";
 
 const AddBook = ({
   authorOptions,
@@ -131,17 +132,18 @@ const AddBook = ({
           <InputError message={errors?.author} />
         </div>
 
-        <div>
+        <div className="relative">
           <label className={`block pb-1 text-sm capitalize text-gray-700`}>
             PublishedDate
           </label>
-          <TextInput
-             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
-            value={book?.publishDate}
-            handleChange={(e) => handleBook(e.target.name, e.target.value)}
-            type="date"
-            name="publishDate"
-          />
+          <Datepicker
+           inputClassName="border-gray-400 dark:bg-gray-800 px-3 relative border rounded-md w-full py-2 px-2 dark:text-white"
+           asSingle={true}
+           useRange={false}
+          value={{startDate:book?.publishDate,endDate:book?.publishDate}}
+            onChange={(e) => handleBook("publishDate", e.startDate)}
+           />
+         
           <InputError message={errors?.publishDate} />
         </div>
         <div>
@@ -162,10 +164,12 @@ const AddBook = ({
               CoverImage
             </label>
             <input
-              type="file"
-              onChange={handleFileChange} // Handle file change
-              name="coverImage"
-            />
+    type="file"
+    className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+    onChange={handleFileChange} // Handle file change
+    name="coverImage"
+/>
+
             <InputError message={errors?.coverImage} />
           </div>
         )}

@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
 const bookRouter = require("./routes/book");
 const authorRouter = require("./routes/author");
+const readBookRouter = require("./routes/readBook");
 app.use(express.static("build"));
 app.use(express.static("public/images"));
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use("/index", indexRouter);
 app.use("/book", bookRouter);
 app.use("/author", authorRouter);
+app.use("/readbook", readBookRouter);
 
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;

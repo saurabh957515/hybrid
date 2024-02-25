@@ -47,7 +47,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "pdf",
+    path: "readbook",
     element: (
       <Layout>
         <PdfComp />

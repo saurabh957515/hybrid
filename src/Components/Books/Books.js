@@ -205,7 +205,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
           </div>
         </>
       )}
-      <div className="grid grid-cols-4 gap-4 text-gray-900 bg-white gap-x-4 dark:bg-gray-800 dark:text-white">
+      <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
         {books?.map((book, index) => (
           <div
             key={index}

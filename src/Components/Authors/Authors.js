@@ -79,6 +79,10 @@ function Authors() {
   //     theme="light"
   //   />
   // </div>
+  function ClassNames(...strings) {
+    return strings.join(' ');
+  }
+
   return (
     <div className="relative h-full ">
       <div className=" w-full h-[80vh] p-5 ">
@@ -121,18 +125,19 @@ function Authors() {
             </PopUp>
           </div>
         </div>
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full space-y-2.5">
           {authors?.map((author, index) => (
             <Disclosure defaultOpen={index == 0} className="w-full" key={index}>
               {({ open }) => (
                 <>
                   <Disclosure.Button>
-                    <div className="mx-auto text-lg font-bold text-white bg-blue-400 ">
+                    <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:text-white custom-border">
                       <div className="flex justify-between w-full">
                         <span>
                           {index + 1} {author?.name}
                         </span>
-                        <div>
+                        <div className="flex space-x-2">
+                         
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -142,10 +147,15 @@ function Authors() {
                               setSelectedAuthor(author);
                             }}
                           >
-                            <PencilSquareIcon className="w-6 h-6 text-gray-900" />
+                            <PencilSquareIcon className="w-6 h-6 text-blue-500" />
                           </button>
                           <button onClick={() => deleteAuthor(author?._id)}>
-                            <TrashIcon className="w-6 h-6 text-gray-900 " />
+                            <TrashIcon className="w-6 h-6 text-red-500 " />
+                          </button>
+                          <button>
+                            <ChevronDownIcon
+                              className={ClassNames(open ? "rotate-180" : "", "h-5 w-5")}
+                            />
                           </button>
                         </div>
                       </div>
@@ -153,8 +163,8 @@ function Authors() {
                       {error[`${author?.name}`]}
                     </div>
                   </Disclosure.Button>
-                  <Disclosure.Panel className="flex">
-                    <div key={book?._id}>
+                  <Disclosure.Panel className="flex w-full">
+                    <div className="w-full p-5" key={book?._id}>
                       <Books isAuthor={true} searchAuthor={author?._id} />{" "}
                     </div>
                   </Disclosure.Panel>
