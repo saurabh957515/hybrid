@@ -39,7 +39,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   }, [isBookAdd]);
 
   function getData() {
-    console.log(searchOptions);
     axios
       .get("/book", {
         params: searchOptions,

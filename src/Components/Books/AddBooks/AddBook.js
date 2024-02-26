@@ -101,7 +101,6 @@ const AddBook = ({
     const file = e.target.files[0];
     handleBook("coverImage", file);
   };
-  console.log(book, authorOptions);
   return (
     <div className="">
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">

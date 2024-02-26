@@ -7,6 +7,15 @@ const Book = require("../models/book");
 const multer = require("multer");
 const { queryByRole } = require("@testing-library/react");
 const upload = multer({ dest: "public/images" });
+const pdfStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/books"); // Save PDF files to the 'public/books' directory
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // Set a unique filename for each file
+  },
+})
+const pdfUpload = multer({ storage: pdfStorage }).single("pdf");
 
 router.get("/", async (req, res) => {
   const { dateOptions, title, author } = req.query;

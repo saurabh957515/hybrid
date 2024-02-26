@@ -81,9 +81,9 @@ function Layout({ children }) {
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                       <div className="flex space-x-4">
-                        {navigation.map((item) => (
+                        {navigation.map((item,index) => (
                           <Link
-                            key={item.name}
+                            key={index}
                             to={item.to}
                             className={classNames(
                               item.current
