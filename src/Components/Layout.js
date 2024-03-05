@@ -43,7 +43,7 @@ function Layout({ children }) {
     });
   }
   return (
-    <div className="relative w-full dark:bg-gray-800">
+    <div className="relative flex flex-col w-full h-full border dark:bg-gray-800">
       <div className="z-50 sticky-nav">
         <Disclosure
           as="nav"
@@ -81,7 +81,7 @@ function Layout({ children }) {
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                       <div className="flex space-x-4">
-                        {navigation.map((item,index) => (
+                        {navigation.map((item, index) => (
                           <Link
                             key={index}
                             to={item.to}
@@ -230,8 +230,7 @@ function Layout({ children }) {
           </div>
         </div>
       </div>
-
-      {children}
+      <div className="bg-[#F9F9F9] grow">{children}</div>
     </div>
   );
 }

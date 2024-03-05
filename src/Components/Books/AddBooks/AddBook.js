@@ -28,6 +28,7 @@ const AddBook = ({
     pageCount: "",
     coverImage: "",
     description: "",
+    book: "",
   });
 
   useEffect(() => {
@@ -71,10 +72,11 @@ const AddBook = ({
       formData.append("author", book.author);
       formData.append("publishDate", book.publishDate);
       formData.append("pageCount", book.pageCount);
-      formData.append("coverImage", book.coverImage); // Append file object
       formData.append("description", book.description);
+      formData.append("book", book.book);
+      console.log(formData)
       axios
-        .post("/book", formData)
+        .post("/readbook", formData)
         .then((res) => {
           if (res.data.errors) {
             setErrors(() => {
@@ -101,6 +103,12 @@ const AddBook = ({
     const file = e.target.files[0];
     handleBook("coverImage", file);
   };
+
+  const handleBookChange = (e) => {
+    console.log(e.target.files);
+    const file = e.target.files[0];
+    handleBook("book", file);
+  };
   return (
     <div className="">
       <form onSubmit={onSubmit} className="grid w-full grid-cols-2 gap-4 p-5">
@@ -109,7 +117,7 @@ const AddBook = ({
             Title
           </label>
           <TextInput
-             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.title}
             handleChange={(e) => handleBook("title", e.target.value)}
             name="title"
@@ -122,7 +130,7 @@ const AddBook = ({
           </label>
 
           <ReactSelect
-             className="h-10 text-white border-gray-300 rounded-lg C dark:border-white border-1 focus:outline-none"
+            className="h-10 text-white border-gray-300 rounded-lg C dark:border-white border-1 focus:outline-none"
             options={authorOptions}
             value={book?.author}
             onChange={(e) => handleBook("author", e?.value)}
@@ -136,13 +144,13 @@ const AddBook = ({
             PublishedDate
           </label>
           <Datepicker
-           inputClassName="border-gray-400 dark:bg-gray-800 px-3 relative border rounded-md w-full py-2 px-2 dark:text-white"
-           asSingle={true}
-           useRange={false}
-          value={{startDate:book?.publishDate,endDate:book?.publishDate}}
+            inputClassName="border-gray-400 dark:bg-gray-800 px-3 relative border rounded-md w-full py-2 px-2 dark:text-white"
+            asSingle={true}
+            useRange={false}
+            value={{ startDate: book?.publishDate, endDate: book?.publishDate }}
             onChange={(e) => handleBook("publishDate", e.startDate)}
-           />
-         
+          />
+
           <InputError message={errors?.publishDate} />
         </div>
         <div>
@@ -150,7 +158,7 @@ const AddBook = ({
             PageCount
           </label>
           <TextInput
-             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.pageCount}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="pageCount"
@@ -163,21 +171,34 @@ const AddBook = ({
               CoverImage
             </label>
             <input
-    type="file"
-    className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
-    onChange={handleFileChange} // Handle file change
-    name="coverImage"
-/>
+              type="file"
+              className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+              onChange={handleFileChange} // Handle file change
+              name="coverImage"
+            />
 
             <InputError message={errors?.coverImage} />
           </div>
         )}
+         <div>
+            <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+              Book
+            </label>
+            <input
+              type="file"
+              className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+              onChange={handleBookChange} // Handle file change
+              name="book"
+            />
+
+            <InputError message={errors?.book} />
+          </div>
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Description
           </label>
           <TextInput
-             className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.description}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="description"

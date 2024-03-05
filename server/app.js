@@ -12,6 +12,7 @@ const authorRouter = require("./routes/author");
 const readBookRouter = require("./routes/readBook");
 app.use(express.static("build"));
 app.use(express.static("public/images"));
+app.use(express.static("public/books"));
 
 // parse application/json
 app.use(bodyParser.urlencoded({ extended: false }));
