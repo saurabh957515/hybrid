@@ -22,15 +22,15 @@ const bookSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-  // coverImage: {
-  //   type: String,
-  //   required: true,
-  // },
-  // author: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: true,
-  //   ref: "Author",
-  // },
+  coverImage: {
+    type: String,
+    required: true,
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Author",
+  },
   book: {
     type: String,
     required: true,

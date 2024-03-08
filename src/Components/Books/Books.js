@@ -216,6 +216,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:5000/${book?.coverImage})`,
             }}
           >
+            {console.log(book)}
             <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
               {book?.title}
             </h5>

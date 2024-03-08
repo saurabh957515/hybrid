@@ -75,7 +75,6 @@ const AddBook = ({
       formData.append("description", book.description);
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
-      console.log(formData)
       axios
         .post("/book", formData)
         .then((res) => {
@@ -118,7 +117,7 @@ const AddBook = ({
             Title
           </label>
           <TextInput
-            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.title}
             handleChange={(e) => handleBook("title", e.target.value)}
             name="title"
@@ -131,7 +130,7 @@ const AddBook = ({
           </label>
 
           <ReactSelect
-            className="h-10 text-white border-gray-300 rounded-lg C dark:border-white border-1 focus:outline-none"
+            className="h-10 border-gray-300 rounded-lg dark:text-white C dark:border-white border-1 focus:outline-none"
             options={authorOptions}
             value={book?.author}
             onChange={(e) => handleBook("author", e?.value)}
@@ -159,7 +158,7 @@ const AddBook = ({
             PageCount
           </label>
           <TextInput
-            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.pageCount}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="pageCount"
@@ -199,7 +198,7 @@ const AddBook = ({
             Description
           </label>
           <TextInput
-            className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+            className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
             value={book?.description}
             handleChange={(e) => handleBook(e.target.name, e.target.value)}
             name="description"

@@ -76,7 +76,6 @@ router.post(
     { name: "book", maxCount: 1 },
   ]),
   async (req, res) => {
-    console.log(req?.files)
     const { title, author, publishDate, pageCount, description } = req.body;
     const book = new Book({
       title: title,
@@ -93,12 +92,13 @@ router.post(
 
     try {
       // Save the updated author document
-      await author.save();
+      await newAuthor.save();
 
       // Save the book document
       const newBook = await book.save();
       res.send(newBook);
     } catch (error) {
+        console.log(error)
       res.status(500).send(error);
     }
   }
