@@ -6,7 +6,31 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
 const { queryByRole } = require("@testing-library/react");
-const upload = multer({ dest: "public/images" });
+// const upload = multer({ dest: "public/images" });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      if (file.fieldname === "coverImage") {
+        cb(null, "public/images");
+      } else if (file.fieldname === "book") {
+        cb(null, "public/books");
+      } else {
+        cb(new Error("Invalid field name"));
+      }
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(
+        null,
+        file.fieldname +
+          "-" +
+          uniqueSuffix +
+          "." +
+          file.originalname.split(".").pop()
+      );
+    },
+  }),
+});
 
 router.get("/", async (req, res) => {
   const { dateOptions, title, author } = req.query;
@@ -45,27 +69,40 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", upload.single("coverImage"), async (req, res) => {
-  const book = new Book({
-    title: req.body.title,
-    author: req.body.author,
-    publishDate: new Date(req.body.publishDate),
-    pageCount: req.body.pageCount,
-    description: req.body.description,
-    coverImage: req?.file?.filename || null,
-  });
-  const author = await Author.findById(req.body.author);
-  author.books.push(book._id);
+router.post(
+  "/",
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "book", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    console.log(req?.files)
+    const { title, author, publishDate, pageCount, description } = req.body;
+    const book = new Book({
+      title: title,
+      author: author,
+      publishDate: new Date(publishDate),
+      pageCount: pageCount,
+      description: description,
+      coverImage: req?.files["coverImage"]?.[0]?.filename || null,
+      book: req?.files["book"]?.[0]?.filename || null,
+    });
 
-  // Save the updated author document
-  await author.save();
-  try {
-    const newBook = await book.save();
-    res.send(newBook);
-  } catch (error) {
-    res.send(error);
+    const newAuthor = await Author.findById(author);
+    newAuthor.books.push(book._id);
+
+    try {
+      // Save the updated author document
+      await author.save();
+
+      // Save the book document
+      const newBook = await book.save();
+      res.send(newBook);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
-});
+);
 
 // Show Book Route
 router.get("/:id", async (req, res) => {

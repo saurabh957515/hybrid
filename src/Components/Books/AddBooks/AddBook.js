@@ -73,10 +73,11 @@ const AddBook = ({
       formData.append("publishDate", book.publishDate);
       formData.append("pageCount", book.pageCount);
       formData.append("description", book.description);
+      formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
       console.log(formData)
       axios
-        .post("/readbook", formData)
+        .post("/book", formData)
         .then((res) => {
           if (res.data.errors) {
             setErrors(() => {

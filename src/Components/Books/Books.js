@@ -13,9 +13,10 @@ import { Popover, Transition } from "@headlessui/react";
 import WhiteButton from "../Fileds/WhiteButton";
 import ReactSelect from "../Fileds/ReactSelect";
 import PdfComp from "../PdfComp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
+  const navigate = useNavigate();
   const [books, setBooks] = useState(oldbooks);
   const [searchOptions, setSearchOptions] = useState({
     title: "",
@@ -218,18 +219,18 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
             <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
               {book?.title}
             </h5>
-            {console.log(book)}
-<PdfComp pdfFile={`${process.env.PUBLIC_URL}/${book?.book}`}/>
             <div className="absolute space-x-2 bottom-2 right-2">
-              <Link>
-              <WhiteButton
-                className="text-sm dark:opacity-75"
-           
-              >
-                Read
-              </WhiteButton>
-              </Link>
+              {console.log({ state: { bookData: book?.book } })}
               
+                <WhiteButton
+                  onClick={() =>
+                    book?.book&&  navigate("/readbook", { state: { bookData: book?.book } })
+                  }
+                  className="text-sm dark:opacity-75"
+                >
+                  Read
+                </WhiteButton>
+
               <WhiteButton
                 className="text-sm dark:opacity-75"
                 onClick={() => {
