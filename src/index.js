@@ -15,7 +15,7 @@ import Books from "./Components/Books/Books";
 import "./index.css";
 import { pdfjs } from "react-pdf";
 import PdfComp from "./Components/PdfComp";
-
+import Home from "./Components/Home/Home";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.js",
   import.meta.url
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Layout>
-        <PdfComp />
+        <Home />
       </Layout>
     ),
   },

@@ -145,7 +145,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                   useRange={dateRange}
                   primaryColor="blue"
                   asSingle={!dateRange}
-                  inputClassName="border border-gray-500 dark:border-white w-full py-1.5 text-opacity-80 pr-10 px-2 rounded-lg dark:bg-gray-800 text-white"
+                  inputClassName="border border-gray-500 dark:border-white w-full py-1.5 text-opacity-80 pr-10 px-2 rounded-lg dark:bg-gray-800 dark:text-white"
                   value={searchOptions?.dateOptions}
                   onChange={(date) => {
                     setSearchOptions((pre) => ({
@@ -164,7 +164,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                       title: e.target.value,
                     }))
                   }
-                  className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+                  className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
                   type="search"
                   placeholder="Search"
                 />
@@ -216,7 +216,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:5000/${book?.coverImage})`,
             }}
           >
-            {console.log(book)}
             <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
               {book?.title}
             </h5>

@@ -16,7 +16,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const navigation = [
-  { name: "Books", to: "/books", current: true },
+  { name: "Books", to: "/", current: true },
   { name: "Authors", to: "/authors", current: false },
   { name: "Books", to: "/books", current: false },
   { name: "Start...", to: "/readbook", current: false },
@@ -47,7 +47,7 @@ function Layout({ children }) {
       <div className="z-50 sticky-nav">
         <Disclosure
           as="nav"
-          className="text-white bg-white dark:bg-gray-800 dark:text-white"
+          className="text-white bg-white shadow dark:bg-gray-800 dark:text-white"
         >
           {({ open }) => (
             <>
@@ -139,7 +139,7 @@ function Layout({ children }) {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
                             {({ active }) => (
                               <a
@@ -225,7 +225,7 @@ function Layout({ children }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg pointer-events-auto ring-1 ring-black ring-opacity-5"></div>
+              <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5"></div>
             </Transition>
           </div>
         </div>
