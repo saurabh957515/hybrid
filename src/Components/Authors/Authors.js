@@ -130,7 +130,7 @@ function Authors() {
             <Disclosure defaultOpen={index == 0} className="w-full" key={index}>
               {({ open }) => (
                 <>
-                  <Disclosure.Button>
+                  <Disclosure.Button as="div">
                     <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:text-white custom-border">
                       <div className="flex justify-between w-full">
                         <span>
