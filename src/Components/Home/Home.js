@@ -18,16 +18,22 @@ function Home() {
     }
     return () => clearInterval(intervalId);
   }, [isReading]);
+
   const getTime = async () => {
     const data = await axios.get("/readbook/time", {
       params: { time: timer, note: bookNote },
     });
+    console.log(data);
     if (!isReading) {
       toast.success("Timer started  !", {});
     } else {
       toast.warning("Timer Ended !", {});
     }
   };
+
+  useEffect(() => {
+    console.log(getTime());
+  }, []);
   return (
     <div className="w-full p-5 ">
       <div className="items-center px-2 border rounded w-96">
