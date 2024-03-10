@@ -13,12 +13,12 @@ export default function PdfComp() {
   const location = useLocation();
   const { state } = location;
   const [pdfFile, setPdfFile] = useState(String);
-  const [numPages, setNumPages] = useState('000');
+  const [numPages, setNumPages] = useState("000");
   const [pageNumber, setPageNumber] = useState(1);
   const [books, setBooks] = useState([]);
   const [searchOptions, setSearchOptions] = useState({});
   const [SideBarOpen, setSideBarOpen] = useState(false);
-  const[pageWidth,setPageWidth]=useState('')
+  const [pageWidth, setPageWidth] = useState("");
 
   async function getData() {
     const data = await axios.get(
@@ -62,13 +62,18 @@ export default function PdfComp() {
   return (
     <div className="flex flex-col h-full p-6 overflow-hidden rounded-lg shadow-lg dark:bg-gray-800">
       <div className="text-center text-gray-600 ">
-      
-      Page   <input onChange={(e)=>setPageNumber(e.target.value)} value={pageNumber} className="w-[25px] mx-2"></input> of {numPages}
+        Page{" "}
+        <input
+          onChange={(e) => setPageNumber(e.target.value)}
+          value={pageNumber}
+          className="w-[25px] mx-2"
+        ></input>{" "}
+        of {numPages}
       </div>
       <div className="flex w-full p-5 space-x-4 border rounded grow">
         <div
           className={classNames(
-            "flex justify-center w-3/4 h-full  bg-[#D9D9D9]",
+            "flex justify-center w-3/4 h-full duration-1000  transition-all bg-[#D9D9D9]",
             !SideBarOpen && "w-full"
           )}
         >
@@ -82,7 +87,7 @@ export default function PdfComp() {
                 .map((x, i) => i + 1)
                 .map((page) => (
                   <Page
-                  width={pageWidth}
+                    width={pageWidth}
                     onPageChange={({ pageNumber }) => console.log(pageNumber)}
                     key={page}
                     pageNumber={page}

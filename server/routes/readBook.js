@@ -16,11 +16,6 @@ router.post("/", upload.single("book"), async (req, res) => {
     coverImage: req?.file?.filename || null,
     book: req?.file?.filename || null,
   });
-  // const author = await Author.findById(req.body.author);
-  // author.books.push(book._id);
-
-  // Save the updated author document
-  // await author.save();
   try {
     const newBook = await book.save();
     res.send(newBook);
@@ -28,5 +23,10 @@ router.post("/", upload.single("book"), async (req, res) => {
     res.send(error);
   }
 });
+
+router.get('/time',async(req,res)=>{
+  console.log(req?.query)
+  res.send("hello i am gonna send the time")
+})
 
 module.exports = router;

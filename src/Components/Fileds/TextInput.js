@@ -26,7 +26,7 @@ export default function TextInput({
   }, []);
 
   return (
-    <div className="flex w-full flex-col items-start">
+    <div className="flex flex-col items-start ">
       <input
         id={id}
         type={type === "password" ? (viewType ? "password" : "text") : type}
@@ -46,13 +46,13 @@ export default function TextInput({
           className={`w-full ${className} -mt-7 flex flex-row-reverse text-right`}
         >
           <div
-            className="z-20 mx-2 cursor-pointer bg-white px-1"
+            className="z-20 px-1 mx-2 bg-white cursor-pointer"
             onClick={() => setViewType((pre) => !pre)}
           >
             {viewType ? (
-              <EyeSlashIcon className="z-20 h-5 w-5 text-latisGray-800" />
+              <EyeSlashIcon className="z-20 w-5 h-5 text-latisGray-800" />
             ) : (
-              <EyeIcon className="z-20 h-5 w-5 text-latisGray-800" />
+              <EyeIcon className="z-20 w-5 h-5 text-latisGray-800" />
             )}
           </div>
         </div>

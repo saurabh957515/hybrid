@@ -12,6 +12,9 @@ import {
   SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -45,6 +48,18 @@ function Layout({ children }) {
   return (
     <div className="relative flex flex-col w-full h-full border dark:bg-gray-800">
       <div className="z-50 sticky-nav">
+        <ToastContainer
+          position="top-right"
+          autoClose={1500}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={true}
+          pauseOnHover={true}
+          theme="light"
+        />
         <Disclosure
           as="nav"
           className="text-white bg-white shadow dark:bg-gray-800 dark:text-white"
@@ -55,6 +70,7 @@ function Layout({ children }) {
                 <div className="relative flex items-center justify-between h-16">
                   <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                     {/* Mobile menu button*/}
+                    <div></div>
                     <Disclosure.Button className="relative inline-flex items-center justify-center p-2 text-gray-400 rounded-md dark:text-gray-900 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
@@ -109,6 +125,9 @@ function Layout({ children }) {
 
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button
+                      onClick={() => {
+                        toast.info("Author Deleted !!");
+                      }}
                       type="button"
                       className="relative p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >

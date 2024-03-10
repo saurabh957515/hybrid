@@ -6,9 +6,8 @@ import axios from "axios";
 import PopUp from "../Fileds/PopUp";
 import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
-import { ToastContainer, toast, useToast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
 
 import {
   ChevronDownIcon,
@@ -28,8 +27,6 @@ function Authors() {
   const [error, setError] = useState({});
   const [selectedAuthor, setSelectedAuthor] = useState({});
   const [book, setBook] = useState({});
-  const notify = () => toast.success("Success Notification !", {});
-  // make the new page where user can change the authors and book and customize both and get the books according to eachOthers
   const [authorName, setAuthorName] = useState("");
 
   async function onSubmit(e) {
@@ -64,23 +61,8 @@ function Authors() {
     getAuthors();
   }, [isOpen]);
 
-  //   <div>
-  //   <button onClick={notify}>Notify!</button>
-  //   <ToastContainer
-  //     position="top-right"
-  //     autoClose={1500}
-  //     hideProgressBar={false}
-  //     newestOnTop={true}
-  //     closeOnClick
-  //     rtl={false}
-  //     pauseOnFocusLoss
-  //     draggable={true}
-  //     pauseOnHover={true}
-  //     theme="light"
-  //   />
-  // </div>
   function ClassNames(...strings) {
-    return strings.join(' ');
+    return strings.join(" ");
   }
 
   return (
@@ -137,7 +119,6 @@ function Authors() {
                           {index + 1} {author?.name}
                         </span>
                         <div className="flex space-x-2">
-                         
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -154,7 +135,10 @@ function Authors() {
                           </button>
                           <button>
                             <ChevronDownIcon
-                              className={ClassNames(open ? "rotate-180" : "", "h-5 w-5")}
+                              className={ClassNames(
+                                open ? "rotate-180" : "",
+                                "h-5 w-5"
+                              )}
                             />
                           </button>
                         </div>
