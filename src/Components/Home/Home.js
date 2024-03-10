@@ -20,8 +20,9 @@ function Home() {
   }, [isReading]);
 
   const getTime = async () => {
+    // send obj with the logIn and out here..
     const data = await axios.get("/readbook/time", {
-      params: { time: timer, note: bookNote },
+      params: { time: timer, note: bookNote,date:new Date() },
     });
     console.log(data);
     if (!isReading) {
