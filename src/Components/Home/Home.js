@@ -4,6 +4,7 @@ import classNames, { FlashContext } from "../Helper";
 import axios from "axios";
 import TextInput from "../Fileds/TextInput";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 function Home() {
   const [timer, setTimer] = useState(0);
@@ -11,6 +12,11 @@ function Home() {
   const [bookNote, setBookNote] = useState("");
   useEffect(() => {
     let intervalId;
+    if (!isReading) {
+      toast.success("Timer started  !", {});
+    } else {
+      toast.warning("Timer Ended !", {});
+    }
     if (isReading) {
       intervalId = setInterval(() => {
         setTimer((pre) => pre + 1);
@@ -19,22 +25,28 @@ function Home() {
     return () => clearInterval(intervalId);
   }, [isReading]);
 
-  const getTime = async () => {
-    // send obj with the logIn and out here..
-    const data = await axios.get("/readbook/time", {
-      params: { time: timer, note: bookNote,date:new Date() },
+  const getTime = async (time) => {
+    const timerData = await axios.get("/readbook/time", {
+      params: {
+        time: timer,
+        note: bookNote,
+        date: moment(),
+        isTimerOn: time,
+      },
     });
-    console.log(data);
-    if (!isReading) {
-      toast.success("Timer started  !", {});
-    } else {
-      toast.warning("Timer Ended !", {});
-    }
+    setIsReading(timerData?.data?.isTimerOn);
+    setTimer(timerData?.data?.timer);
   };
 
   useEffect(() => {
-    console.log(getTime());
+    getTime();
   }, []);
+
+  function formatTime(seconds) {
+    const duration = moment.duration(seconds, 'seconds');
+    return moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
+  }
+  console.log(formatTime(timer))
   return (
     <div className="w-full p-5 ">
       <div className="items-center px-2 border rounded w-96">
@@ -60,7 +72,7 @@ function Home() {
           />
           <div
             onClick={(e) => {
-              getTime();
+              getTime(!isReading);
               setIsReading(!isReading);
             }}
             className={classNames(
@@ -73,7 +85,7 @@ function Home() {
           </div>
         </div>
         <div className="flex p-4 h-28">
-          <span className="m-auto">Reading Time : {timer}</span>
+          <span className="m-auto">Reading Time : {formatTime(timer)}</span>
         </div>
       </div>
     </div>

@@ -26,29 +26,49 @@ router.post("/", upload.single("book"), async (req, res) => {
 });
 
 router.get("/time", async (req, res) => {
-  const logDate = moment(req?.query?.date).startOf("day"); // Get the start of the day for the provided date timer
-
-  // Get the end of the day for the provided date
+  // underStand this thing moment start of and how does the filter working logTime
+  const logDate = moment(req?.query?.date).startOf("day");
   const endDate = moment(logDate).endOf("day");
-
-  // Querying the database for documents created within the date range
-  const logTime = await LogTime.findOne({
+  let logPunch = await LogTime.findOne({
     createdAt: {
-      $gte: logDate.toDate(), // Convert Moment object to Date object
-      $lt: endDate.toDate(), // Convert Moment object to Date object
+      $gte: logDate.toDate(),
+      $lt: endDate.toDate(),
     },
   });
-
-  // If no document is found for the provided date, create a new one
-  if (!logTime) {
-    const newLog = new LogTime({});
-    await newLog.save();
-  } else {
-    logTime.Timelog.push(req?.query?.time );
-    await logTime.save();
+  if (!logPunch) {
+    logPunch = new LogTime({});
   }
-  console.log(logTime);
-  res.send("hello i am gonna send the time");
+  const lastLogDetail = logPunch?.Timelog[logPunch.Timelog?.length - 1];
+  const logDifference = moment(req?.query?.date).diff(
+    moment(lastLogDetail?.logTime),
+    "seconds"
+  );
+  console.log(req?.query?.date,lastLogDetail)
+  console.log(logDifference, req?.query?.isTimerOn, lastLogDetail?.time,lastLogDetail?.isTimerOn);
+  if (req?.query?.isTimerOn !== undefined) {
+    logPunch.Timelog.push({
+      time: req?.query?.time,
+      logNote: req?.query?.note,
+      isTimerOn: req?.query?.isTimerOn,
+      logTime: req?.query?.date,
+    });
+  } else if (logDifference > 1 && lastLogDetail?.isTimerOn ) {
+    console.log("i should be comming", logDifference, lastLogDetail?.time);
+    logPunch.Timelog.push({
+      time: logDifference + +lastLogDetail?.time,
+      logNote: "Adding when comming from the diff page",
+      isTimerOn: true,
+      logTime: req?.query?.date,
+    });
+  }
+  const lastTimer = logPunch?.Timelog[logPunch.Timelog?.length - 1];
+
+  await logPunch.save();
+  console.log(lastTimer);
+  res.send({
+    timer: lastTimer?.time? lastTimer?.time : 0,
+    isTimerOn: lastTimer?.isTimerOn,
+  });
 });
 
 module.exports = router;
