@@ -19,7 +19,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const navigation = [
-  { name: "Books", to: "/", current: true },
+  { name: "Books", to: "/dashboard", current: true },
   { name: "Authors", to: "/authors", current: false },
   { name: "Books", to: "/books", current: false },
   { name: "Start...", to: "/readbook", current: false },

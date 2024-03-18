@@ -11,6 +11,7 @@ import PrimaryButton from "../../Fileds/PrimaryButton";
 import InputError from "../../Fileds/InputError";
 import moment from "moment";
 import Datepicker from "react-tailwindcss-datepicker";
+import { storedToken } from "../../Helper";
 
 const AddBook = ({
   authorOptions,
@@ -76,7 +77,11 @@ const AddBook = ({
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
       axios
-        .post("/book", formData)
+        .post("/book", formData,{
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        })
         .then((res) => {
           if (res.data.errors) {
             setErrors(() => {

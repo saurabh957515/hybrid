@@ -10,6 +10,8 @@ const indexRouter = require("./routes/index");
 const bookRouter = require("./routes/book");
 const authorRouter = require("./routes/author");
 const readBookRouter = require("./routes/readBook");
+const userRouter = require("./routes/user");
+const authCheck = require("./routes/authmiddleware");
 app.use(express.static("build"));
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
@@ -17,10 +19,11 @@ app.use(express.static("public/books"));
 // parse application/json
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use("/auth", userRouter);
 app.use("/index", indexRouter);
-app.use("/book", bookRouter);
-app.use("/author", authorRouter);
-app.use("/readbook", readBookRouter);
+app.use("/book",authCheck, bookRouter);
+app.use("/author",authCheck, authorRouter);
+app.use("/readbook",authCheck, readBookRouter);
 
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;

@@ -14,6 +14,7 @@ import WhiteButton from "../Fileds/WhiteButton";
 import ReactSelect from "../Fileds/ReactSelect";
 import PdfComp from "../PdfComp";
 import { Link, useNavigate } from "react-router-dom";
+import { storedToken } from "../Helper";
 
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const navigate = useNavigate();
@@ -45,6 +46,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     axios
       .get("/book", {
         params: searchOptions,
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
       })
       .then((res) => {
         if (res.data.errors) {
@@ -221,15 +225,16 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
             </h5>
             <div className="absolute space-x-2 bottom-2 right-2">
               {console.log({ state: { bookData: book?.book } })}
-              
-                <WhiteButton
-                  onClick={() =>
-                    book?.book&&  navigate("/readbook", { state: { bookData: book?.book } })
-                  }
-                  className="text-sm dark:opacity-75"
-                >
-                  Read
-                </WhiteButton>
+
+              <WhiteButton
+                onClick={() =>
+                  book?.book &&
+                  navigate("/readbook", { state: { bookData: book?.book } })
+                }
+                className="text-sm dark:opacity-75"
+              >
+                Read
+              </WhiteButton>
 
               <WhiteButton
                 className="text-sm dark:opacity-75"

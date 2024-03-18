@@ -7,7 +7,7 @@ import {
   Bars3CenterLeftIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import classNames from "./Helper";
+import classNames, { storedToken } from "./Helper";
 
 export default function PdfComp() {
   const location = useLocation();
@@ -21,15 +21,12 @@ export default function PdfComp() {
   const [pageWidth, setPageWidth] = useState("");
 
   async function getData() {
-    const data = await axios.get(
-      "/book",
-      {
-        params: searchOptions,
-      },
-      {
-        params: {},
+    const data = await axios.get("/book", {
+      params: searchOptions,
+      headers: {
+        Authorization: `Bearer ${storedToken}`,
       }
-    );
+    });
     setBooks(data?.data?.books);
   }
   useEffect(() => {

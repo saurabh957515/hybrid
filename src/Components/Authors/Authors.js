@@ -19,6 +19,7 @@ import {
 import { Disclosure } from "@headlessui/react";
 import Books from "../Books/Books";
 import WhiteButton from "../Fileds/WhiteButton";
+import classNames, { storedToken } from "../Helper";
 
 function Authors() {
   const [authors, setAuthors] = useState([]);
@@ -33,22 +34,36 @@ function Authors() {
     e.preventDefault();
     if (isEdit) {
       const data = await axios
-        .put(`/author/${selectedAuthor?._id}`, { name: authorName })
+        .put(`/author/${selectedAuthor?._id}`, { name: authorName },{
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        })
         .then((res) => console.log(res.data));
       setIsEdit(false);
       setIsOpen(false);
     } else {
-      axios.post("/author", { name: authorName });
+      axios.post("/author", { name: authorName },{
+        headers: {
+          Authorization: `Bearer ${storedToken}`
+        }
+      });
       setIsOpen(false);
       toast.success("Author Successfully Saved !", {});
       setAuthorName("");
     }
   }
   function getAuthors() {
-    axios.get("/author").then((res) => setAuthors(res.data.authors));
+    axios.get("/author",{headers: {
+      Authorization: `Bearer ${storedToken}`,
+    }}).then((res) => setAuthors(res.data.authors));
   }
   async function deleteAuthor(id) {
-    const data = await axios.delete(`/author/${id}`);
+    const data = await axios.delete(`/author/${id}`,{
+      headers: {
+        Authorization: `Bearer ${storedToken}`
+      }
+    });
     if (data?.data?.errors) {
       setError(data?.data?.errors);
     } else {
@@ -61,9 +76,6 @@ function Authors() {
     getAuthors();
   }, [isOpen]);
 
-  function ClassNames(...strings) {
-    return strings.join(" ");
-  }
 
   return (
     <div className="relative h-full ">
@@ -135,7 +147,7 @@ function Authors() {
                           </button>
                           <button>
                             <ChevronDownIcon
-                              className={ClassNames(
+                              className={classNames(
                                 open ? "rotate-180" : "",
                                 "h-5 w-5"
                               )}
