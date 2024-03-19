@@ -18,6 +18,7 @@ import PdfComp from "./Components/PdfComp";
 import Home from "./Components/Home/Home";
 import LogIn from "./Components/DashBoard/LogIn";
 import SignUp from "./Components/DashBoard/SignUp";
+import ResetPassword from "./Components/DashBoard/ResetPassword";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.js",
   import.meta.url
@@ -25,15 +26,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-        <LogIn />
-    ),
+    element: <LogIn />,
   },
   {
     path: "/signup",
-    element: (
-        <SignUp />
-    ),
+    element: <SignUp />,
+  },
+  {
+    path: "/resetPassword",
+    element: <ResetPassword />,
   },
   {
     path: "/dashboard",
