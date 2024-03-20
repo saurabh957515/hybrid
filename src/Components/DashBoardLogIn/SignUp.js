@@ -21,7 +21,7 @@ function SignUp() {
       toast.success(response?.data?.message);
       setTimeout(() => {
         Navigate("/");
-      }, [1500]);u
+      }, [1500]);
     } catch (error) {
       console.error(error);
     }
