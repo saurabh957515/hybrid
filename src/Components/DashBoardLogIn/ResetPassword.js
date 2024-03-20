@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import TextInput from "../Fileds/TextInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function ResetPassword() {
+  const Navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
     username: "",
@@ -12,7 +14,19 @@ function ResetPassword() {
 
   // /dashboard
   const resetPassword = async (e) => {
-    const postData = await axios.post("/auth/login", data);
+    e.preventDefault();
+    const postData = await axios.post("/auth/reset", data);
+    if (postData?.data?.user && postData?.data?.token) {
+      toast.success(postData?.data?.message);
+      setTimeout(() => {
+        Navigate("/change-password", {
+          state: {
+            token: postData?.data?.token,
+            user: postData?.data?.user,
+          },
+        });
+      }, [1500]);
+    }
   };
   return (
     <div className="flex w-full h-screen divi">
@@ -42,9 +56,7 @@ function ResetPassword() {
               value={data?.code}
             />
           </div>
-          <div className="flex items-center justify-between mb-6">
-           
-          </div>
+          <div className="flex items-center justify-between mb-6"></div>
           <button
             type="submit"
             to="/dashboard"
@@ -53,7 +65,7 @@ function ResetPassword() {
             <div className="w-full ">Reset</div>
           </button>
           <div className="flex items-center justify-center w-full py-2">
-           Go back to Login ?
+            Go back to Login ?
             <Link to="/signup" className="ml-1 font-semibold">
               {" "}
               LogIn

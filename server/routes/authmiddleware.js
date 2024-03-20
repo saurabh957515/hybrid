@@ -11,14 +11,16 @@ var checkUserAuth = async (req, res, next) => {
   if (authorization && authorization.startsWith("Bearer")) {
     try {
       token = authorization.split(" ")[1];
-      const { userId } = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      req.user = await User.findById(userId).select("-password");
+      const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      req.user = await User.findById(userID).select("-password");
       if (req.user) {
         next();
+      } else {
+        console.log("failed");
       }
     } catch (error) {
       console.error(error);
-      res.send.status(500)({ message: "unauthorized user" });
+      res.send({ message: "unauthorized user" });
     }
   }
 };

@@ -16,9 +16,13 @@ import "./index.css";
 import { pdfjs } from "react-pdf";
 import PdfComp from "./Components/PdfComp";
 import Home from "./Components/Home/Home";
-import LogIn from "./Components/DashBoard/LogIn";
-import SignUp from "./Components/DashBoard/SignUp";
-import ResetPassword from "./Components/DashBoard/ResetPassword";
+import LogIn from "./Components/DashBoardLogIn/LogIn";
+import SignUp from "./Components/DashBoardLogIn/SignUp";
+import ResetPassword from "./Components/DashBoardLogIn/ResetPassword";
+import SetPassword from "./Components/DashBoardLogIn/SetPassword";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.js",
   import.meta.url
@@ -27,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LogIn />,
+  },
+  {
+    path: "/change-password",
+    element: <SetPassword />,
   },
   {
     path: "/signup",
@@ -72,5 +80,19 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <div className="h-[100vh] w-[100vw]">
+    <ToastContainer
+      position="top-right"
+      autoClose={1500}
+      hideProgressBar={false}
+      newestOnTop={true}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable={true}
+      pauseOnHover={true}
+      theme="light"
+    />
+    <RouterProvider router={router} />
+  </div>
 );

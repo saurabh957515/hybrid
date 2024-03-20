@@ -25,7 +25,7 @@ const navigation = [
   { name: "Start...", to: "/readbook", current: false },
 ];
 
-function Layout({ children }) {
+function Layout({ children, className }) {
   const [show, setShow] = useState(true);
   const [theme, setTheme] = useState("light");
   useEffect(() => {
@@ -46,9 +46,15 @@ function Layout({ children }) {
     });
   }
   return (
-    <div className="relative flex flex-col w-full h-full border dark:bg-gray-800">
+    // className
+    <div
+      className={classNames(
+        "relative flex flex-col w-full h-full border dark:bg-gray-800 ",
+        
+      )}
+    >
       <div className="z-50 sticky-nav">
-        <ToastContainer
+        {/* <ToastContainer
           position="top-right"
           autoClose={1500}
           hideProgressBar={false}
@@ -59,7 +65,7 @@ function Layout({ children }) {
           draggable={true}
           pauseOnHover={true}
           theme="light"
-        />
+        /> */}
         <Disclosure
           as="nav"
           className="text-white bg-white shadow dark:bg-gray-800 dark:text-white"

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import TextInput from "../Fileds/TextInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const [data, setData] = useState({
@@ -10,13 +11,17 @@ function SignUp() {
     name: "",
     email: "",
   });
+  const Navigate = useNavigate();
   // /dashboard
   const sigingUp = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("/auth/signup", data);
-      console.log(response.data.token)
       localStorage.setItem("token", response?.data?.token);
+      toast.success(response?.data?.message);
+      setTimeout(() => {
+        Navigate("/");
+      }, [1500]);u
     } catch (error) {
       console.error(error);
     }
