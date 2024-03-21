@@ -26,16 +26,24 @@ function Home() {
   }, [isReading]);
 
   const getTime = async (time) => {
-    const timerData = await axios.get("/readbook/time", {
-      params: {
-        time: timer,
-        note: bookNote,
-        date: moment(),
-        isTimerOn: time,
-      },
-    });
-    setIsReading(timerData?.data?.isTimerOn);
-    setTimer(timerData?.data?.timer);
+    console.log("give me the result..")
+    try {
+      const timerData = await axios.get("/readbook/time", {
+        params: {
+          time: timer,
+          note: bookNote,
+          date: moment(),
+          isTimerOn: time,
+        },
+      });
+      console.log(timerData)
+      setIsReading(timerData?.data?.isTimerOn);
+      setTimer(timerData?.data?.timer);
+    } catch (error) {
+      console.error(error)
+    }
+  
+
   };
 
   useEffect(() => {
@@ -46,7 +54,6 @@ function Home() {
     const duration = moment.duration(seconds, 'seconds');
     return moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
   }
-  console.log(formatTime(timer))
   return (
     <div className="w-full p-5 ">
       <div className="items-center px-2 border rounded w-96">

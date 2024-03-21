@@ -26,7 +26,6 @@ router.post("/", upload.single("book"), async (req, res) => {
 });
 
 router.get("/time", async (req, res) => {
-  // underStand this thing moment start of and how does the filter working logTime
   const logDate = moment(req?.query?.date).startOf("day");
   const endDate = moment(logDate).endOf("day");
   let logPunch = await LogTime.findOne({
@@ -52,7 +51,7 @@ router.get("/time", async (req, res) => {
       isTimerOn: req?.query?.isTimerOn,
       logTime: req?.query?.date,
     });
-  } else if (logDifference > 1 && lastLogDetail?.isTimerOn ) {
+  } else if (logDifference > 1 && lastLogDetail?.isTimerOn) {
     console.log("i should be comming", logDifference, lastLogDetail?.time);
     logPunch.Timelog.push({
       time: logDifference + +lastLogDetail?.time,
@@ -66,7 +65,7 @@ router.get("/time", async (req, res) => {
   await logPunch.save();
   console.log(lastTimer);
   res.send({
-    timer: lastTimer?.time? lastTimer?.time : 0,
+    timer: lastTimer?.time ? lastTimer?.time : 0,
     isTimerOn: lastTimer?.isTimerOn,
   });
 });
