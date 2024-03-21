@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authCheck = require("./authmiddleware");
+const transporter=require("../config/emailConfig")
 
 router.post("/signup", async (req, res) => {
   const { username, name, email, password } = req?.body;
@@ -62,12 +63,26 @@ router.post("/reset", async (req, res) => {
   const { email } = req?.body;
   if (email) {
     const user = await User?.findOne({ email: email });
+    
     if (user) {
       const secret = user._id + process.env.JWT_SECRET_KEY;
       const token = jwt.sign({ userID: user._id }, secret, {
         expiresIn: "15m",
       });
       const link = `http://127.0.0.1:3000/change-password/${user._id}/${token}`;
+      // try {
+      //   const info = await transporter.sendMail({
+      //     from: process.env.FROM,
+      //     to: user.email,
+      //     subject: "Hello ✔",
+      //     text: "Hello world?",
+      //     html: `<a href =${link}>Hello world?</a>`,
+      //   });
+      //   console.log(info)
+      // } catch (error) {
+      //   console.error(error)
+      // }
+   
       res.send({
         message: "success",
         token: token,
