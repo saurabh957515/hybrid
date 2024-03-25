@@ -10,17 +10,22 @@ function Home() {
   const [timer, setTimer] = useState(0);
   const [isReading, setIsReading] = useState(false);
   const [bookNote, setBookNote] = useState("");
+  const [counter, setCounter] = useState(0);
   useEffect(() => {
     let intervalId;
-    if (isReading) {
-      toast.success("Timer started  !", {});
-    } else {
-      toast.warning("Timer Ended !", {});
+    if (counter) {
+      if (isReading) {
+        toast.success("Timer started  !", {});
+      } else {
+        toast.warning("Timer Ended !", {});
+      }
     }
+
     if (isReading) {
       intervalId = setInterval(() => {
         setTimer((pre) => pre + 1);
       }, [1000]);
+      setCounter(pre=>pre+1)
     }
     return () => clearInterval(intervalId);
   }, [isReading]);
@@ -33,17 +38,16 @@ function Home() {
           note: bookNote,
           date: moment(),
           isTimerOn: time,
-        },  headers: {
+        },
+        headers: {
           Authorization: `Bearer ${storedToken}`,
-        }
+        },
       });
       setIsReading(timerData?.data?.isTimerOn);
       setTimer(timerData?.data?.timer);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  
-
   };
 
   useEffect(() => {
@@ -51,8 +55,8 @@ function Home() {
   }, []);
 
   function formatTime(seconds) {
-    const duration = moment.duration(seconds, 'seconds');
-    return moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
+    const duration = moment.duration(seconds, "seconds");
+    return moment.utc(duration.asMilliseconds()).format("HH:mm:ss");
   }
   return (
     <div className="w-full p-5 ">
