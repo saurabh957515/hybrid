@@ -12,7 +12,7 @@ function Home() {
   const [bookNote, setBookNote] = useState("");
   useEffect(() => {
     let intervalId;
-    if (!isReading) {
+    if (isReading) {
       toast.success("Timer started  !", {});
     } else {
       toast.warning("Timer Ended !", {});
