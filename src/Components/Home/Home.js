@@ -10,7 +10,7 @@ function Home() {
   const [timer, setTimer] = useState(0);
   const [isReading, setIsReading] = useState(false);
   const [bookNote, setBookNote] = useState("");
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(false);
   useEffect(() => {
     let intervalId;
     if (counter) {
@@ -25,7 +25,7 @@ function Home() {
       intervalId = setInterval(() => {
         setTimer((pre) => pre + 1);
       }, [1000]);
-      setCounter(pre=>pre+1)
+      setCounter(true);
     }
     return () => clearInterval(intervalId);
   }, [isReading]);
