@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authCheck = require("./authmiddleware");
 const transporter=require("../config/emailConfig")
-
+  
 router.post("/signup", async (req, res) => {
   const { username, name, email, password } = req?.body;
 
@@ -48,6 +48,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 router.post("/login", async (req, res) => {
+console.log("hello...")
   const { username, password } = req?.body;
   let user = await User.findOne({ username: username });
   if (user) {

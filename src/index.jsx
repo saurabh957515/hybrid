@@ -8,7 +8,6 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import "./index.css";
 import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Authors";
 import Books from "./Components/Books/Books";
