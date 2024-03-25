@@ -12,7 +12,7 @@ const authorRouter = require("./routes/author");
 const readBookRouter = require("./routes/readBook");
 const userRouter = require("./routes/user");
 const authCheck = require("./routes/authmiddleware");
-app.use(express.static("build"));
+app.use(express.static("dist"));
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
 
