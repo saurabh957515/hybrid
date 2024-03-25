@@ -7,7 +7,9 @@ const jwt = require("jsonwebtoken");
 
 var checkUserAuth = async (req, res, next) => {
   let token;
+
   const { authorization } = req?.headers;
+
   if (authorization && authorization.startsWith("Bearer")) {
     try {
       token = authorization.split(" ")[1];

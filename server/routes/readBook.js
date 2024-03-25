@@ -42,8 +42,6 @@ router.get("/time", async (req, res) => {
     moment(lastLogDetail?.logTime),
     "seconds"
   );
-  console.log(req?.query?.date,lastLogDetail)
-  console.log(logDifference, req?.query?.isTimerOn, lastLogDetail?.time,lastLogDetail?.isTimerOn);
   if (req?.query?.isTimerOn !== undefined) {
     logPunch.Timelog.push({
       time: req?.query?.time,
@@ -52,7 +50,6 @@ router.get("/time", async (req, res) => {
       logTime: req?.query?.date,
     });
   } else if (logDifference > 1 && lastLogDetail?.isTimerOn) {
-    console.log("i should be comming", logDifference, lastLogDetail?.time);
     logPunch.Timelog.push({
       time: logDifference + +lastLogDetail?.time,
       logNote: "Adding when comming from the diff page",
@@ -63,7 +60,6 @@ router.get("/time", async (req, res) => {
   const lastTimer = logPunch?.Timelog[logPunch.Timelog?.length - 1];
 
   await logPunch.save();
-  console.log(lastTimer);
   res.send({
     timer: lastTimer?.time ? lastTimer?.time : 0,
     isTimerOn: lastTimer?.isTimerOn,

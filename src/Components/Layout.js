@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
@@ -14,20 +14,25 @@ import {
 } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { setCurrentByName } from "../store/Slices/NavigationSlice";
+import { useSelector, useDispatch } from "react-redux";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
 const navigation = [
-  { name: "Books", to: "/dashboard", current: true },
+  { name: "Books", to: "/dashboard", current: false },
   { name: "Authors", to: "/authors", current: false },
   { name: "Books", to: "/books", current: false },
   { name: "Start...", to: "/readbook", current: false },
 ];
 
 function Layout({ children, className }) {
+  const Navigations = useSelector((state) => state?.NavigationSlice);
+  const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [theme, setTheme] = useState("light");
+  const Navigate = useNavigate();
   useEffect(() => {
     if (theme === "light") {
       document.documentElement.classList.remove("dark");
@@ -46,26 +51,13 @@ function Layout({ children, className }) {
     });
   }
   return (
-    // className
     <div
       className={classNames(
-        "relative flex flex-col w-full h-full border dark:bg-gray-800 ",
-        
+        "relative flex flex-col w-full h-full border dark:bg-gray-800 "
       )}
     >
+      <div></div>
       <div className="z-50 sticky-nav">
-        {/* <ToastContainer
-          position="top-right"
-          autoClose={1500}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable={true}
-          pauseOnHover={true}
-          theme="light"
-        /> */}
         <Disclosure
           as="nav"
           className="text-white bg-white shadow dark:bg-gray-800 dark:text-white"
@@ -103,8 +95,11 @@ function Layout({ children, className }) {
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                       <div className="flex space-x-4">
-                        {navigation.map((item, index) => (
+                        {Navigations.map((item, index) => (
                           <Link
+                            onClick={(e) => {
+                              dispatch(setCurrentByName(item?.name));
+                            }}
                             key={index}
                             to={item.to}
                             className={classNames(
@@ -193,15 +188,18 @@ function Layout({ children, className }) {
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <div
+                                onClick={() => {
+                                  localStorage.setItem("token", null);
+                                  Navigate("/");
+                                }}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}
                               >
                                 Sign out
-                              </a>
+                              </div>
                             )}
                           </Menu.Item>
                         </Menu.Items>
@@ -213,7 +211,7 @@ function Layout({ children, className }) {
 
               <Disclosure.Panel className="sm:hidden">
                 <div className="px-2 pt-2 pb-3 space-y-1">
-                  {navigation.map((item) => (
+                  {Navigations.map((item) => (
                     <Disclosure.Button
                       key={item.name}
                       as="a"

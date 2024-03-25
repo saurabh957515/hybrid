@@ -15,6 +15,8 @@ import ReactSelect from "../Fileds/ReactSelect";
 import PdfComp from "../PdfComp";
 import { Link, useNavigate } from "react-router-dom";
 import { storedToken } from "../Helper";
+import { useDispatch } from "react-redux";
+import { setCurrentByName } from "../../store/Slices/NavigationSlice";
 
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const navigate = useNavigate();
@@ -90,7 +92,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     setIsBookAdd((pre) => !pre);
     setIsEdit(false);
   }
-
+  const dispatch = useDispatch();
   return (
     <div className="bg-white dark:bg-gray-800">
       {!isAuthor && (
@@ -224,13 +226,13 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               {book?.title}
             </h5>
             <div className="absolute space-x-2 bottom-2 right-2">
-              {console.log({ state: { bookData: book?.book } })}
-
               <WhiteButton
-                onClick={() =>
-                  book?.book &&
-                  navigate("/readbook", { state: { bookData: book?.book } })
-                }
+                onClick={() => {
+                  if (book?.book) {
+                    navigate("/readbook", { state: { bookData: book?.book } });
+                    dispatch(setCurrentByName("Start..."));
+                  }
+                }}
                 className="text-sm dark:opacity-75"
               >
                 Read

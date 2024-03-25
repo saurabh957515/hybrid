@@ -22,6 +22,8 @@ import ResetPassword from "./Components/DashBoardLogIn/ResetPassword";
 import SetPassword from "./Components/DashBoardLogIn/SetPassword";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { store } from "./store/store";
+import { Provider } from 'react-redux'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.js",
@@ -80,7 +82,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <div className="h-[100vh] w-[100vw]">
+  <Provider store={store}>
+    <div className="h-[100vh] w-[100vw]">
     <ToastContainer
       position="top-right"
       autoClose={1500}
@@ -95,4 +98,6 @@ createRoot(document.getElementById("root")).render(
     />
     <RouterProvider router={router} />
   </div>
+  </Provider>,
+  
 );

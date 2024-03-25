@@ -6,18 +6,19 @@ import { toast } from "react-toastify";
 
 function LogIn() {
   const [data, setData] = useState({
-    username: "",
-    password: "",
+    username: "newName",
+    password: "newName@123",
   });
-  const Navigate=useNavigate()
+  const Navigate = useNavigate();
   // /dashboard
   const logIn = async (e) => {
     e.preventDefault();
     const postData = await axios.post("/auth/login", data);
+    localStorage.setItem("token", postData?.data?.token);
     toast.success(postData?.data?.message);
-    setTimeout(()=>{
-      Navigate("/dashboard")
-    },[1500])
+    setTimeout(() => {
+      Navigate("/dashboard");
+    }, [1500]);
   };
 
   return (

@@ -33,36 +33,46 @@ function Authors() {
   async function onSubmit(e) {
     e.preventDefault();
     if (isEdit) {
-      const data = await axios
-        .put(`/author/${selectedAuthor?._id}`, { name: authorName },{
+      const data = await axios.put(
+        `/author/${selectedAuthor?._id}`,
+        { name: authorName },
+        {
           headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        })
-        .then((res) => console.log(res.data));
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
       setIsEdit(false);
       setIsOpen(false);
     } else {
-      axios.post("/author", { name: authorName },{
-        headers: {
-          Authorization: `Bearer ${storedToken}`
+      axios.post(
+        "/author",
+        { name: authorName },
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
         }
-      });
+      );
       setIsOpen(false);
       toast.success("Author Successfully Saved !", {});
       setAuthorName("");
     }
   }
   function getAuthors() {
-    axios.get("/author",{headers: {
-      Authorization: `Bearer ${storedToken}`,
-    }}).then((res) => setAuthors(res.data.authors));
+    axios
+      .get("/author", {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      })
+      .then((res) => setAuthors(res.data.authors));
   }
   async function deleteAuthor(id) {
-    const data = await axios.delete(`/author/${id}`,{
+    const data = await axios.delete(`/author/${id}`, {
       headers: {
-        Authorization: `Bearer ${storedToken}`
-      }
+        Authorization: `Bearer ${storedToken}`,
+      },
     });
     if (data?.data?.errors) {
       setError(data?.data?.errors);
@@ -75,7 +85,6 @@ function Authors() {
   useEffect(() => {
     getAuthors();
   }, [isOpen]);
-
 
   return (
     <div className="relative h-full ">

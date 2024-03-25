@@ -1,6 +1,6 @@
 import { BookOpenIcon, ClockIcon } from "@heroicons/react/24/outline";
 import React, { useContext, useEffect, useState } from "react";
-import classNames, { FlashContext } from "../Helper";
+import classNames, { FlashContext, storedToken } from "../Helper";
 import axios from "axios";
 import TextInput from "../Fileds/TextInput";
 import { toast } from "react-toastify";
@@ -26,7 +26,6 @@ function Home() {
   }, [isReading]);
 
   const getTime = async (time) => {
-    console.log("give me the result..")
     try {
       const timerData = await axios.get("/readbook/time", {
         params: {
@@ -34,9 +33,10 @@ function Home() {
           note: bookNote,
           date: moment(),
           isTimerOn: time,
-        },
+        },  headers: {
+          Authorization: `Bearer ${storedToken}`,
+        }
       });
-      console.log(timerData)
       setIsReading(timerData?.data?.isTimerOn);
       setTimer(timerData?.data?.timer);
     } catch (error) {
