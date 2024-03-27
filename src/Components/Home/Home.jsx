@@ -32,7 +32,7 @@ function Home() {
 
   const getTime = async (time) => {
     try {
-      const timerData = await axios.get("/readbook/time", {
+      const timerData = await axios.get("/api/readbook/time", {
         params: {
           time: timer,
           note: bookNote,

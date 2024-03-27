@@ -34,7 +34,7 @@ function Authors() {
     e.preventDefault();
     if (isEdit) {
       const data = await axios.put(
-        `/author/${selectedAuthor?._id}`,
+        `/api/author/${selectedAuthor?._id}`,
         { name: authorName },
         {
           headers: {
@@ -46,7 +46,7 @@ function Authors() {
       setIsOpen(false);
     } else {
       axios.post(
-        "/author",
+        "/api/author",
         { name: authorName },
         {
           headers: {
@@ -61,7 +61,7 @@ function Authors() {
   }
   function getAuthors() {
     axios
-      .get("/author", {
+      .get("/api/author", {
         headers: {
           Authorization: `Bearer ${storedToken}`,
         },
@@ -69,7 +69,7 @@ function Authors() {
       .then((res) => setAuthors(res.data.authors));
   }
   async function deleteAuthor(id) {
-    const data = await axios.delete(`/author/${id}`, {
+    const data = await axios.delete(`/api/author/${id}`, {
       headers: {
         Authorization: `Bearer ${storedToken}`,
       },

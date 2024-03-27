@@ -13,7 +13,7 @@ function LogIn() {
   // /dashboard
   const logIn = async (e) => {
     e.preventDefault();
-    const postData = await axios.post("/auth/login", data);
+    const postData = await axios.post("/api/auth/login", data);
     localStorage.setItem("token", postData?.data?.token);
     toast.success(postData?.data?.message);
     setTimeout(() => {

@@ -46,7 +46,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
 
   function getData() {
     axios
-      .get("/book", {
+      .get("/api/book", {
         params: searchOptions,
         headers: {
           Authorization: `Bearer ${storedToken}`,

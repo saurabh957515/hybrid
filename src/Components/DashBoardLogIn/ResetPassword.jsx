@@ -15,7 +15,7 @@ function ResetPassword() {
   // /dashboard
   const resetPassword = async (e) => {
     e.preventDefault();
-    const postData = await axios.post("/auth/reset", data);
+    const postData = await axios.post("/api/auth/reset", data);
     if (postData?.data?.user && postData?.data?.token) {
       toast.success(postData?.data?.message);
       setTimeout(() => {

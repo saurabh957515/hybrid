@@ -16,7 +16,7 @@ function SignUp() {
   const sigingUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/auth/signup", data);
+      const response = await axios.post("/api/auth/signup", data);
       localStorage.setItem("token", response?.data?.token);
       toast.success(response?.data?.message);
       setTimeout(() => {

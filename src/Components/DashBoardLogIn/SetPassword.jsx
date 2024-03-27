@@ -16,7 +16,7 @@ const Navigate=useNavigate()
   const changePassword = async (e) => {
     e.preventDefault()
     const postData = await axios.post(
-      `/auth/password-reset/${user}/${token}`,
+      `/api/auth/password-reset/${user}/${token}`,
       data
     );
     toast.success(postData?.data.message)

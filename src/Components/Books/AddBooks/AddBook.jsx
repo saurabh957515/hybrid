@@ -77,7 +77,7 @@ const AddBook = ({
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
       axios
-        .post("/book", formData,{
+        .post("/api/book", formData,{
           headers: {
             Authorization: `Bearer ${storedToken}`
           }
