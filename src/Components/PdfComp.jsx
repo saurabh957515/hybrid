@@ -18,14 +18,14 @@ export default function PdfComp() {
   const [books, setBooks] = useState([]);
   const [searchOptions, setSearchOptions] = useState({});
   const [SideBarOpen, setSideBarOpen] = useState(false);
-  const [pageWidth, setPageWidth] = useState("");
+  const [pageWidth, setPageWidth] = useState(800);
 
   async function getData() {
-    const data = await axios.get("/book", {
+    const data = await axios.get("api/book", {
       params: searchOptions,
       headers: {
         Authorization: `Bearer ${storedToken}`,
-      }
+      },
     });
     setBooks(data?.data?.books);
   }
@@ -33,18 +33,6 @@ export default function PdfComp() {
     getData();
     setPdfFile(state?.bookData);
   }, [searchOptions]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (state) {
-  //       const data = await axios.get(
-  //         `${process.env.PUBLIC_URL}/${state?.bookData}`
-  //       );
-  //       setPdfFile(data?.data);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [state]);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -55,7 +43,7 @@ export default function PdfComp() {
   function bookToRead(book) {
     setPdfFile(book);
   }
-
+  console.log("pdfFile", pdfFile);
   return (
     <div className="flex flex-col h-full p-6 overflow-hidden rounded-lg shadow-lg dark:bg-gray-800">
       <div className="text-center text-gray-600 ">
@@ -77,8 +65,9 @@ export default function PdfComp() {
           {pdfFile ? (
             <Document
               className="h-[75vh] overflow-auto "
-              file={`${process.env.PUBLIC_URL}/${pdfFile}`}
+              file={`/${pdfFile}`}
               onLoadSuccess={onDocumentLoadSuccess}
+              onLoadError={(error) => console.error('Error loading PDF:', error)}
             >
               {Array?.apply(null, Array(numPages))
                 .map((x, i) => i + 1)

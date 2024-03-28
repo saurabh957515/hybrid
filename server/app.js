@@ -12,15 +12,21 @@ const authorRouter = require("./routes/author");
 const readBookRouter = require("./routes/readBook");
 const userRouter = require("./routes/user");
 const authCheck = require("./routes/authmiddleware");
+app.use((req, res, next) => {
+  console.log('Static file requested:', req.url);
+  next();
+})
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
 const cors = require('cors');
 // parse application/json
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your React application's origin
+  methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+}
 app.use(cors());
-app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from this origin
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-})) 
+app.use(cors(corsOptions)) 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api/auth", userRouter);
@@ -29,9 +35,9 @@ const path = require("path");
 app.use("/api/book", authCheck, bookRouter);
 app.use("/api/author", authCheck, authorRouter);
 app.use("/api/readbook", authCheck, readBookRouter);
-app.get("*", async (req, res) =>
-  res.sendFile(path.join(__dirname, "dist", "index.html"))
-);
+// app.get("*", async (req, res) =>
+//   res.sendFile(path.join(__dirname, "dist", "index.html"))
+// );
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(`MongoDB connection error: ${error}`));
