@@ -7,14 +7,14 @@ export default defineConfig({
     react(),
     tailwindcss('./tailwind.config.js'),
   ],
-  server: {
-    port: 3000,
-     proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
+  // server: {
+  //   port: 3000,
+  //    proxy: {
+      // '/api': {
+      //   target: 'http://localhost:5000',
+      //   changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, '') // Optional: Strip '/api' from request path
-      }
-    }
-  },
+      // }
+  //   }
+  // },
 });
