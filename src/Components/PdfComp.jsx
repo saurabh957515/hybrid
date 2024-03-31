@@ -65,7 +65,7 @@ export default function PdfComp() {
           {pdfFile ? (
             <Document
               className="h-[75vh] overflow-auto "
-              file={`/${pdfFile}`}
+              file={pdfFile}
               onLoadSuccess={onDocumentLoadSuccess}
               onLoadError={(error) => console.error('Error loading PDF:', error)}
             >
