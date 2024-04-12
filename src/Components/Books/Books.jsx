@@ -213,19 +213,21 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
           </div>
         </>
       )}
-      <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
+      <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 p-4 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
+       
+       {console.log(books)}
         {books?.map((book, index) => (
           <div
             key={index}
             className="relative block max-w-sm p-6 overflow-hidden bg-center bg-cover rounded-lg shadow-lg h-96 dark:bg-neutral-700"
             style={{
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:5000/${book?.coverImage})`,
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:8000/${book?.coverImage})`,
             }}
           >
             <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
               {book?.title}
             </h5>
-            <div className="absolute space-x-2 bottom-2 right-2">
+            <div className="absolute grid grid-cols-3 gap-2 bottom-2 right-2 ">
               <WhiteButton
                 onClick={() => {
                   if (book?.book) {

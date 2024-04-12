@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   console.log('Static file requested:', req.url);
   next();
 })
-app.use(express.static("dist"));
+// app.use(express.static("dist"));
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
 const cors = require('cors');
