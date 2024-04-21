@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   console.log('Static file requested:', req.url);
   next();
 })
-// app.use(express.static("dist"));
+app.use(express.static("dist"));
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
 const cors = require('cors');
@@ -25,17 +25,17 @@ const corsOptions = {
   origin: 'http://localhost:3000', // Replace with your React application's origin
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-}
+};
 app.use(cors());
-app.use(cors(corsOptions)) 
+app.use(cors(corsOptions)); 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/api/auth", userRouter);
-app.use("/api/index", indexRouter);
+app.use("/auth", userRouter);
+app.use("/index", indexRouter);
 const path = require("path");
-app.use("/api/book", authCheck, bookRouter);
-app.use("/api/author", authCheck, authorRouter);
-app.use("/api/readbook", authCheck, readBookRouter);
+app.use("/book", authCheck, bookRouter);
+app.use("/author", authCheck, authorRouter);
+app.use("/readbook", authCheck, readBookRouter);
 app.get("*", async (req, res) =>
   res.sendFile(path.join(__dirname, "dist", "index.html"))
 );

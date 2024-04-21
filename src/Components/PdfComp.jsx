@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Document, Page } from "react-pdf";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import TextInput from "./Fileds/TextInput";
@@ -8,17 +7,19 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import classNames, { storedToken } from "./Helper";
+import { Viewer, SpecialZoomLevel, Worker } from "@react-pdf-viewer/core";
+import "@react-pdf-viewer/core/lib/styles/index.css";
 
 export default function PdfComp() {
   const location = useLocation();
   const { state } = location;
+  const viewerRef = useRef(1);
   const [pdfFile, setPdfFile] = useState(String);
-  const [numPages, setNumPages] = useState("000");
+  const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [books, setBooks] = useState([]);
   const [searchOptions, setSearchOptions] = useState({});
   const [SideBarOpen, setSideBarOpen] = useState(false);
-  const [pageWidth, setPageWidth] = useState(800);
 
   async function getData() {
     const data = await axios.get("api/book", {
@@ -29,32 +30,39 @@ export default function PdfComp() {
     });
     setBooks(data?.data?.books);
   }
+
   useEffect(() => {
     getData();
     setPdfFile(state?.bookData);
   }, [searchOptions]);
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-    // setNumPages(numPages);
-    // setPageNumber(numPages)
-  }
+  const handlePageChange = ({ currentPage, doc }) => {
+    setPageNumber(currentPage + 1);
+    if (numPages === 0) {
+      setNumPages(doc?._pdfInfo?.numPages);
+    }
+  };
 
-  function bookToRead(book) {
-    setPdfFile(book);
-  }
-  console.log("pdfFile", pdfFile);
+  const goToPage = (pageNumber) => {
+    if (viewerRef.current && pageNumber >= 1 && pageNumber <= totalPages) {
+      viewerRef.current.scrollToPage(pageNumber);
+      setCurrentPage(pageNumber);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full p-6 overflow-hidden rounded-lg shadow-lg dark:bg-gray-800">
-      <div className="text-center text-gray-600 ">
-        Page{" "}
-        <input
-          onChange={(e) => setPageNumber(e.target.value)}
-          value={pageNumber}
-          className="w-[25px] mx-2"
-        ></input>{" "}
-        of {numPages}
-      </div>
+      {pdfFile && (
+        <div className="text-center text-gray-600 ">
+          Page
+          <input
+            onChange={(e) => setPageNumber(e.target.value)}
+            value={pageNumber}
+            className="w-[20px]   ml-2 bg-[#F9F9F9]"
+          ></input>
+          of {numPages}
+        </div>
+      )}
       <div className="flex w-full p-5 space-x-4 border rounded grow">
         <div
           className={classNames(
@@ -63,26 +71,23 @@ export default function PdfComp() {
           )}
         >
           {pdfFile ? (
-            <Document
-              className="h-[75vh] overflow-auto "
-              file={pdfFile}
-              onLoadSuccess={onDocumentLoadSuccess}
-              onLoadError={(error) => console.error('Error loading PDF:', error)}
-            >
-              {Array?.apply(null, Array(numPages))
-                .map((x, i) => i + 1)
-                .map((page) => (
-                  <Page
-                    width={pageWidth}
-                    onPageChange={({ pageNumber }) => console.log(pageNumber)}
-                    key={page}
-                    pageNumber={page}
-                    renderTextLayer={false}
-                    renderAnnotationLayer={false}
-                    className="mb-4 "
-                  />
-                ))}
-            </Document>
+            <div style={{ height: "750px", width: "800px" }}>
+              <Viewer
+                fileUrl={`/api/${pdfFile}`}
+                defaultScale={SpecialZoomLevel.PageFit}
+                onPageChange={(e) => {
+                  handlePageChange(e);
+                }}
+                ref={(instance) => {
+                  viewerRef.current = instance;
+                  if (typeof ref === "function") {
+                    ref(instance);
+                  } else if (ref) {
+                    ref.current = instance;
+                  }
+                }}
+              />
+            </div>
           ) : (
             <div className="">"No Book to show......"</div>
           )}
@@ -137,7 +142,10 @@ export default function PdfComp() {
               <div
                 onClick={() => setPdfFile(book?.book)}
                 key={book?._id}
-                className="p-2 border rounded cursor-pointer "
+                className={classNames(
+                  "p-2 border rounded cursor-pointer",
+                  book?.book === pdfFile ? "bg-gray-200" : ""
+                )}
               >
                 <div className="font-medium text-blue-500">{book?.title}</div>
                 <div className="font-normal text-gray-500">
