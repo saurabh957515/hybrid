@@ -20,7 +20,9 @@ const AddBook = ({
   selectedBook,
   isBookAdd,
   onClose,
+  bookErrors
 }) => {
+  console.log(bookErrors)
   const [errors, setErrors] = useState({});
   const [book, setBook] = useState({
     title: "",
@@ -49,7 +51,10 @@ const AddBook = ({
       });
     }
   }, [selectedBook, isBookAdd]);
-
+  useEffect(() => {
+    setErrors(bookErrors)
+  }, [bookErrors])
+  console.log(errors)
   const handleBook = (name, value) => {
     let newBook = _.cloneDeep(book);
     newBook[name] = value;
@@ -77,7 +82,7 @@ const AddBook = ({
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
       axios
-        .post("/api/book", formData,{
+        .post("/api/book", formData, {
           headers: {
             Authorization: `Bearer ${storedToken}`
           }
@@ -170,34 +175,31 @@ const AddBook = ({
           />
           <InputError message={errors?.pageCount} />
         </div>
-        {!isEdit && (
-          <div>
-            <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
-              CoverImage
-            </label>
-            <input
-              type="file"
-              className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
-              onChange={handleFileChange} // Handle file change
-              name="coverImage"
-            />
+        <div>
+          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+            CoverImage
+          </label>
+          <input
+            type="file"
+            className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+            onChange={handleFileChange} // Handle file change
+            name="coverImage"
+          />
+          <InputError message={errors?.coverImage} />
+        </div>
+        <div>
+          <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
+            Book
+          </label>
+          <input
+            type="file"
+            className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+            onChange={handleBookChange} // Handle file change
+            name="book"
+          />
 
-            <InputError message={errors?.coverImage} />
-          </div>
-        )}
-         <div>
-            <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
-              Book
-            </label>
-            <input
-              type="file"
-              className="py-1 border-gray-300 custom-border dark:bg-gray-800 dark:text-white dark:border-gray-700"
-              onChange={handleBookChange} // Handle file change
-              name="book"
-            />
-
-            <InputError message={errors?.book} />
-          </div>
+          <InputError message={errors?.book} />
+        </div>
         <div>
           <label className={`block pb-1 text-sm capitalize text-gray-700  `}>
             Description

@@ -3,7 +3,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-import Layout from "../Layout";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
 import TextInput from "../Fileds/TextInput";
@@ -11,9 +10,7 @@ import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Datepicker from "react-tailwindcss-datepicker";
 import { Popover, Transition } from "@headlessui/react";
 import WhiteButton from "../Fileds/WhiteButton";
-import ReactSelect from "../Fileds/ReactSelect";
-import PdfComp from "../PdfComp";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { storedToken } from "../Helper";
 import { useDispatch } from "react-redux";
 import { setCurrentByName } from "../../store/Slices/NavigationSlice";
@@ -32,14 +29,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const [isBookAdd, setIsBookAdd] = useState(false);
   const [selectedBook, setSelectedBook] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
-  const [Errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [show, setShow] = useState(false);
   const [dateRange, setDateRange] = useState(false);
-  const [dateOptions, setDateOptions] = useState({
-    startDate: "",
-    endDate: "",
-  });
   useEffect(() => {
     getData();
   }, [isBookAdd]);
@@ -73,26 +65,71 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   }
 
   async function deleteBook(id) {
-    const data = await axios.delete(`/book/${id}`).then((res) => res?.data);
-    if (data?.errors) {
-    } else {
+    try {
+      const data = await axios.delete(`/api/book/${id}`, {
+        params: searchOptions,
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      }).then((res) => {
+        if (res.data.errors) {
+          setErrors(() => {
+            let newErrors = {};
+            _.forIn(res.data.errors, function (value, key) {
+              newErrors[key] = value.message;
+            });
+            return newErrors;
+          });
+        } else {
+          setErrors({});
+        }
+      }
+      )
       getData();
+    } catch (error) {
+      console.log("i am the one", error)
     }
+    // const data = await axios.delete(`/book/${id}`).then((res) => res?.data);
+    // if (data?.errors) {
+    // } else {
+    //   getData();
+    // }
   }
+
   async function editBook(id, book) {
-    const data = await axios.put(`/book/${id}`, book).then((res) => res?.data);
-    if (data?.errors) {
-    } else {
+    try {
+      const data = await axios.put(`/api/book/${id}`, book, {
+        params: searchOptions,
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      }).then((res) => res?.data);
       getData();
       setIsBookAdd(false);
+    } catch (error) {
+      let errorObject = error?.response?.data?.errors
+      let newErrors = {};
+      _.forIn(errorObject, function (value, key) {
+        newErrors[key] = value.message;
+      });
+      console.log(newErrors)
+      setErrors(newErrors);
     }
+    // const data = await axios.put(`/book/${id}`, book).then((res) => res?.data);
+    // if (data?.errors) {
+    // } else {
+    //   getData();
+    //   setIsBookAdd(false);
+    // }
   }
 
   function onClose() {
     setIsBookAdd((pre) => !pre);
     setIsEdit(false);
   }
+
   const dispatch = useDispatch();
+
   return (
     <div className="bg-white dark:bg-gray-800">
       {!isAuthor && (
@@ -106,7 +143,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               className="flex items-center w-3/4 px-8 mx-auto space-x-2 "
             >
               <div>
-                <Popover className="relative">
+                <Popover className="relative top-1">
                   <Popover.Button>
                     <FunnelIcon className="w-6 h-6 text-gray-300 dark:text-white" />
                   </Popover.Button>
@@ -118,9 +155,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                     leaveFrom="transform scale-100 opacity-100"
                     leaveTo="transform scale-95 opacity-0"
                   >
-                    <Popover.Panel className="absolute z-10 mt-1">
+                    <Popover.Panel className="absolute z-10 mt-2">
                       {({ close }) => (
-                        <div className="flex flex-col p-2 text-base font-medium text-black bg-white border border-gray-300 rounded-lg dark:bg-gray-800 w-44 dark:text-white">
+                        <div className="flex flex-col p-2 text-base font-medium text-gray-400 bg-white border border-gray-300 rounded-lg dark:bg-gray-800 w-44 dark:text-white">
                           <div
                             onClick={() => {
                               setDateRange(true);
@@ -200,6 +237,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 isOpen={isBookAdd}
               >
                 <AddBook
+                  bookErrors={errors}
                   onClose={onClose}
                   isBookAdd={isBookAdd}
                   editBook={editBook}
@@ -214,8 +252,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
         </>
       )}
       <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 p-4 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
-       
-       {console.log(books)}
         {books?.map((book, index) => (
           <div
             key={index}
@@ -252,7 +288,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               </WhiteButton>
               <WhiteButton
                 className="text-sm dark:opacity-75"
-                onClick={() => deleteBook(book?._id)}
+                onClick={() => {
+                  deleteBook(book?._id)
+                }}
               >
                 Delete
               </WhiteButton>

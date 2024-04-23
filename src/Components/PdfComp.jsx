@@ -38,9 +38,7 @@ export default function PdfComp() {
 
   const handlePageChange = ({ currentPage, doc }) => {
     setPageNumber(currentPage + 1);
-    if (numPages === 0) {
-      setNumPages(doc?._pdfInfo?.numPages);
-    }
+    setNumPages(doc?._pdfInfo?.numPages);
   };
 
   const goToPage = (pageNumber) => {
@@ -58,7 +56,7 @@ export default function PdfComp() {
           <input
             onChange={(e) => setPageNumber(e.target.value)}
             value={pageNumber}
-            className="w-[20px]   ml-2 bg-[#F9F9F9]"
+            className="w-[20px] ml-1 bg-[#F9F9F9]"
           ></input>
           of {numPages}
         </div>

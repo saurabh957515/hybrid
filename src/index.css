@@ -5,20 +5,53 @@
   height: 100vh;
   /* width: 100vw; */
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .custom-border {
-  border: 1px solid #cbd5e0; /* border-gray-400 */
-  border-radius: 4px; /* rounded-md */
+  border: 1px solid #cbd5e0;
+  /* border-gray-400 */
+  border-radius: 4px;
+  /* rounded-md */
 }
+
 .sticky-nav {
   position: sticky;
   top: 0;
   backdrop-filter: blur(10px);
   z-index: 10;
 }
+
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-left: 4px solid;
+  animation: load 1s infinite linear;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.button {
+  padding: 1rem 2rem;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  background-color: #2080df;
+}
+
 @layer components {
   .my-react-select-container .my-react-select__control {
     @apply bg-white border-2 border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500;
@@ -60,9 +93,7 @@
     @apply bg-gray-500 rounded-full dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-800;
   }
 
-  .my-react-select-container
-    .my-react-select__multi-value__remove
-    .css-tj5bde-Svg {
+  .my-react-select-container .my-react-select__multi-value__remove .css-tj5bde-Svg {
     @apply text-gray-200 dark:text-gray-400;
   }
 
@@ -78,9 +109,7 @@
   }
 
   .my-react-select-container .my-react-select__clear-indicator .css-tj5bde-Svg,
-  .my-react-select-container
-    .my-react-select__dropdown-indicator
-    .css-tj5bde-Svg {
+  .my-react-select-container .my-react-select__dropdown-indicator .css-tj5bde-Svg {
     @apply fill-current;
   }
 }

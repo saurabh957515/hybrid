@@ -13,10 +13,10 @@ const readBookRouter = require("./routes/readBook");
 const userRouter = require("./routes/user");
 const authCheck = require("./routes/authmiddleware");
 app.use((req, res, next) => {
-  console.log('Static file requested:', req.url);
+  // console.log('Static file requested:', req.url);
   next();
 })
-app.use(express.static("dist"));
+// app.use(express.static("dist"));
 app.use(express.static("public/images"));
 app.use(express.static("public/books"));
 const cors = require('cors');
@@ -36,9 +36,9 @@ const path = require("path");
 app.use("/book", authCheck, bookRouter);
 app.use("/author", authCheck, authorRouter);
 app.use("/readbook", authCheck, readBookRouter);
-app.get("*", async (req, res) =>
-  res.sendFile(path.join(__dirname, "dist", "index.html"))
-);
+// app.get("*", async (req, res) =>
+//   res.sendFile(path.join(__dirname, "dist", "index.html"))
+// );
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(`MongoDB connection error: ${error}`));

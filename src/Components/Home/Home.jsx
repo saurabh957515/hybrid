@@ -11,6 +11,7 @@ function Home() {
   const [isReading, setIsReading] = useState(false);
   const [bookNote, setBookNote] = useState("");
   const [counter, setCounter] = useState(false);
+  const [isLoader, setIsLoader] = useState(true);
   useEffect(() => {
     let intervalId;
     if (counter) {
@@ -45,6 +46,8 @@ function Home() {
       });
       setIsReading(timerData?.data?.isTimerOn);
       setTimer(timerData?.data?.timer);
+      setIsLoader(false)
+      setBookNote('')
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +66,6 @@ function Home() {
       <div className="items-center px-2 border rounded w-96">
         <div className="flex items-center justify-between p-4 text-base font-medium capitalize border-b">
           <span>Book ReadingTime</span>
-
           <span>
             <BookOpenIcon className="w-5 h-5" />
           </span>
@@ -87,16 +89,23 @@ function Home() {
               setIsReading(!isReading);
             }}
             className={classNames(
-              isReading ? "bg-red-500" : "bg-green-500",
+              isLoader ? "bg-[#2080df]" : isReading ? "bg-red-500" : "bg-green-500",
               "w-2/4 p-2 rounded cursor-pointer -mt-2.5 flex justify-between items-center"
             )}
           >
-            {isReading ? "End Timer" : "StartTimer"}
-            <ClockIcon className="w-5 h-5 " />
+
+            {isLoader ?
+              <div className="loader text-white mx-auto" /> : <>
+                {isReading ? "End Timer" : "StartTimer"}
+                <ClockIcon className="w-5 h-5 " />
+
+              </>
+            }
           </div>
         </div>
-        <div className="flex p-4 h-28">
-          <span className="m-auto">Reading Time : {formatTime(timer)}</span>
+        {/* ,!isLoader?"items-center":"w-full " */}
+        <div className={classNames("flex p-4 h-28 w-full")}>
+          <span className={classNames("m-auto transition-all duration-1000", isLoader ? "hidden" : "")}>Reading Time : {formatTime(timer)}</span>
         </div>
       </div>
     </div>

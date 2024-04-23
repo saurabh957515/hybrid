@@ -23,16 +23,17 @@ const upload = multer({
       cb(
         null,
         file.fieldname +
-          "-" +
-          uniqueSuffix +
-          "." +
-          file.originalname.split(".").pop()
+        "-" +
+        uniqueSuffix +
+        "." +
+        file.originalname.split(".").pop()
       );
     },
   }),
 });
 
 router.get("/", async (req, res) => {
+
   const { dateOptions, title, author } = req.query;
   let authorOptions = await Author?.find();
   authorOptions = authorOptions.map((author) => ({
@@ -98,7 +99,7 @@ router.post(
       const newBook = await book.save();
       res.send(newBook);
     } catch (error) {
-        console.log(error)
+      console.log(error)
       res.status(500).send(error);
     }
   }
@@ -117,7 +118,6 @@ router.get("/:id", async (req, res) => {
 // Update Book Route
 router.put("/:id", upload.single("coverImage"), async (req, res) => {
   let book;
-
   try {
     book = await Book.findById(req.params.id);
     book.title = req.body.title;
@@ -125,10 +125,11 @@ router.put("/:id", upload.single("coverImage"), async (req, res) => {
     book.publishDate = new Date(req.body.publishDate);
     book.pageCount = req.body.pageCount;
     book.description = req.body.description;
-    (book.coverImage = req?.file?.filename || null), await book.save();
+    (book.coverImage = req?.file?.filename || null),
+      await book.save();
     res.send("book updated successfully");
-  } catch {
-    res.send("book updated successfully");
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
