@@ -10,7 +10,6 @@ function LogIn() {
     password: "newName@123",
   });
   const Navigate = useNavigate();
-  // /dashboard
   const logIn = async (e) => {
     e.preventDefault();
     const postData = await axios.post("api/auth/login", data);
@@ -26,7 +25,7 @@ function LogIn() {
       <div className="flex justify-center w-1/2 my-auto ">
         <img
           src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          class="w-full"
+          className="w-full"
           alt="Sample image"
         />
       </div>

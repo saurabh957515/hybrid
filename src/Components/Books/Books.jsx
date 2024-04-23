@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { storedToken } from "../Helper";
 import { useDispatch } from "react-redux";
 import { setCurrentByName } from "../../store/Slices/NavigationSlice";
+import { deleteById, editRoute, getRoute } from "../../UseApi";
 
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const navigate = useNavigate();
@@ -37,90 +38,37 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   }, [isBookAdd]);
 
   function getData() {
-    axios
-      .get("/api/book", {
-        params: searchOptions,
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      })
-      .then((res) => {
-        if (res.data.errors) {
-          setErrors(() => {
-            let newErrors = {};
-            _.forIn(res.data.errors, function (value, key) {
-              newErrors[key] = value.message;
-            });
-            return newErrors;
-          });
-        } else {
-          setBooks(res.data.books);
-          setAuthorOptions(res.data?.searchOptions);
-          setErrors({});
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-
-  async function deleteBook(id) {
-    try {
-      const data = await axios.delete(`/api/book/${id}`, {
-        params: searchOptions,
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      }).then((res) => {
-        if (res.data.errors) {
-          setErrors(() => {
-            let newErrors = {};
-            _.forIn(res.data.errors, function (value, key) {
-              newErrors[key] = value.message;
-            });
-            return newErrors;
-          });
-        } else {
-          setErrors({});
-        }
+    const data = getRoute("/api/book", searchOptions).then((res) => {
+      if (res.data) {
+        setBooks(res.data.books);
+        setAuthorOptions(res.data.searchOptions);
+        setErrors({});
+      } else {
+        setErrors(res.errors)
       }
-      )
-      getData();
-    } catch (error) {
-      console.log("i am the one", error)
-    }
-    // const data = await axios.delete(`/book/${id}`).then((res) => res?.data);
-    // if (data?.errors) {
-    // } else {
-    //   getData();
-    // }
+    });
   }
 
-  async function editBook(id, book) {
-    try {
-      const data = await axios.put(`/api/book/${id}`, book, {
-        params: searchOptions,
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      }).then((res) => res?.data);
-      getData();
-      setIsBookAdd(false);
-    } catch (error) {
-      let errorObject = error?.response?.data?.errors
-      let newErrors = {};
-      _.forIn(errorObject, function (value, key) {
-        newErrors[key] = value.message;
-      });
-      console.log(newErrors)
-      setErrors(newErrors);
-    }
-    // const data = await axios.put(`/book/${id}`, book).then((res) => res?.data);
-    // if (data?.errors) {
-    // } else {
-    //   getData();
-    //   setIsBookAdd(false);
-    // }
+  function deleteBook(id) {
+    const data = deleteById(`/api/book/${id}`).then(res => {
+      if (res.data) {
+        setErrors({});
+        getData();
+      } else {
+        setErrors(res.errors);
+      }
+    })
+  }
+
+  function editBook(id, book) {
+    const data = editRoute(`/api/book/${id}`, book).then(res => {
+      if (res.data) {
+        getData();
+        setIsBookAdd(false);
+      } else {
+        setErrors(res.errors);
+      }
+    })
   }
 
   function onClose() {

@@ -12,6 +12,7 @@ import InputError from "../../Fileds/InputError";
 import moment from "moment";
 import Datepicker from "react-tailwindcss-datepicker";
 import { storedToken } from "../../Helper";
+import { postRoute } from "../../../UseApi";
 
 const AddBook = ({
   authorOptions,
@@ -22,7 +23,6 @@ const AddBook = ({
   onClose,
   bookErrors
 }) => {
-  console.log(bookErrors)
   const [errors, setErrors] = useState({});
   const [book, setBook] = useState({
     title: "",
@@ -54,7 +54,6 @@ const AddBook = ({
   useEffect(() => {
     setErrors(bookErrors)
   }, [bookErrors])
-  console.log(errors)
   const handleBook = (name, value) => {
     let newBook = _.cloneDeep(book);
     newBook[name] = value;
@@ -81,31 +80,15 @@ const AddBook = ({
       formData.append("description", book.description);
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
-      axios
-        .post("/api/book", formData, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        })
-        .then((res) => {
-          if (res.data.errors) {
-            setErrors(() => {
-              let newErrors = {};
-              _.forIn(res.data.errors, function (value, key) {
-                newErrors[key] = value.message;
-              });
-              return newErrors;
-            });
-          } else {
-            // Handle successful response
-            setBook(res.data);
-            setErrors({});
-            onClose();
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const data = postRoute("/api/book", formData).then(res => {
+        if (res.data) {
+          setBook(res.data);
+          setErrors({});
+          onClose();
+        } else {
+          setErrors(res.errors)
+        }
+      })
     }
   };
 
@@ -115,7 +98,6 @@ const AddBook = ({
   };
 
   const handleBookChange = (e) => {
-    console.log(e.target.files);
     const file = e.target.files[0];
     handleBook("book", file);
   };

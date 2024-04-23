@@ -22,7 +22,8 @@ var checkUserAuth = async (req, res, next) => {
       }
     } catch (error) {
       console.error(error);
-      res.send({ message: "unauthorized user" });
+      res.send({ errorMessage: "UnAuthorized User" });
+
     }
   }
 };

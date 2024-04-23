@@ -6,7 +6,6 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 const multer = require("multer");
 const { queryByRole } = require("@testing-library/react");
-// const upload = multer({ dest: "public/images" });
 const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
@@ -31,9 +30,7 @@ const upload = multer({
     },
   }),
 });
-
 router.get("/", async (req, res) => {
-
   const { dateOptions, title, author } = req.query;
   let authorOptions = await Author?.find();
   authorOptions = authorOptions.map((author) => ({
@@ -69,7 +66,6 @@ router.get("/", async (req, res) => {
     res.send(error);
   }
 });
-
 router.post(
   "/",
   upload.fields([
@@ -78,29 +74,27 @@ router.post(
   ]),
   async (req, res) => {
     const { title, author, publishDate, pageCount, description } = req.body;
-    const book = new Book({
-      title: title,
-      author: author,
-      publishDate: new Date(publishDate),
-      pageCount: pageCount,
-      description: description,
-      coverImage: req?.files["coverImage"]?.[0]?.filename || null,
-      book: req?.files["book"]?.[0]?.filename || null,
-    });
-
-    const newAuthor = await Author.findById(author);
-    newAuthor.books.push(book._id);
-
     try {
-      // Save the updated author document
-      await newAuthor.save();
-
-      // Save the book document
-      const newBook = await book.save();
-      res.send(newBook);
+      const book = new Book({
+        title: title,
+        author: author,
+        publishDate: new Date(publishDate),
+        pageCount: pageCount,
+        description: description,
+        coverImage: req?.files["coverImage"]?.[0]?.filename || null,
+        book: req?.files["book"]?.[0]?.filename || null,
+      });
+      try {
+        const newBook = await book.save();
+        const newAuthor = await Author.findById(book?.author);
+        newAuthor.books.push(book._id);
+        await newAuthor.save();
+        res.send(newBook);
+      } catch (error) {
+        res.send(error);
+      }
     } catch (error) {
-      console.log(error)
-      res.status(500).send(error);
+      res.send(error);
     }
   }
 );
@@ -129,7 +123,7 @@ router.put("/:id", upload.single("coverImage"), async (req, res) => {
       await book.save();
     res.send("book updated successfully");
   } catch (error) {
-    res.status(500).send(error);
+    res.send(error);
   }
 });
 

@@ -20,6 +20,7 @@ import { Disclosure } from "@headlessui/react";
 import Books from "../Books/Books";
 import WhiteButton from "../Fileds/WhiteButton";
 import classNames, { storedToken } from "../Helper";
+import { deleteById, editRoute, getRoute, postRoute } from "../../UseApi";
 
 function Authors() {
   const [authors, setAuthors] = useState([]);
@@ -33,54 +34,38 @@ function Authors() {
   async function onSubmit(e) {
     e.preventDefault();
     if (isEdit) {
-      const data = await axios.put(
-        `/api/author/${selectedAuthor?._id}`,
-        { name: authorName },
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
+      const data = editRoute(`/api/author/${selectedAuthor?._id}`, { name: authorName }).then(res => {
+        if (res.data) {
+          setIsEdit(false);
+          setIsOpen(false);
         }
-      );
-      setIsEdit(false);
-      setIsOpen(false);
+      })
     } else {
-      axios.post(
-        "/api/author",
-        { name: authorName },
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        }
-      );
+      const data = await postRoute("/api/author", { name: authorName })
       setIsOpen(false);
       toast.success("Author Successfully Saved !", {});
       setAuthorName("");
     }
   }
+
   function getAuthors() {
-    axios
-      .get("/api/author", {
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      })
-      .then((res) => setAuthors(res.data.authors));
+    const data = getRoute("/api/author").then(res => {
+      if (res.data) {
+        setAuthors(res.data.authors)
+      }
+    })
   }
+
   async function deleteAuthor(id) {
-    const data = await axios.delete(`/api/author/${id}`, {
-      headers: {
-        Authorization: `Bearer ${storedToken}`,
-      },
-    });
-    if (data?.data?.errors) {
-      setError(data?.data?.errors);
-    } else {
-      getAuthors();
-      setAuthorName("");
-      toast.success("Author Deleted !!");
-    }
+    const data = deleteById(`/api/author/${id}`).then(res => {
+      if (res.data) {
+        getAuthors();
+        setAuthorName("");
+        toast.success("Author Deleted !!");
+      } else {
+        setError(res.errors);
+      }
+    })
   }
   useEffect(() => {
     getAuthors();
@@ -151,7 +136,10 @@ function Authors() {
                           >
                             <PencilSquareIcon className="w-6 h-6 text-blue-500" />
                           </button>
-                          <button onClick={() => deleteAuthor(author?._id)}>
+                          <button onClick={(e) => {
+                            e.stopPropagation();
+                            deleteAuthor(author?._id)
+                          }}>
                             <TrashIcon className="w-6 h-6 text-red-500 " />
                           </button>
                           <button>
