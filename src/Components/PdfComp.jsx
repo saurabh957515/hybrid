@@ -69,7 +69,7 @@ export default function PdfComp() {
           )}
         >
           {pdfFile ? (
-            <div style={{ height: "750px", width: "800px" }}>
+            <div style={{ height: "690px", width: "1000px" }}>
               <Viewer
                 fileUrl={`/api/${pdfFile}`}
                 defaultScale={SpecialZoomLevel.PageFit}

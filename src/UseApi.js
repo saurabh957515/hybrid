@@ -4,7 +4,7 @@ import _ from "lodash";
 const getErrors = (errorObj) => {
   let newErrors = {};
   _.forIn(errorObj, function (value, key) {
-    newErrors[key] = value.message;
+    newErrors[key] = value.message || value;
   });
   return { errors: newErrors };
 };
@@ -54,6 +54,7 @@ export const deleteById = async (url, id) => {
     const { data } = await axios.delete(url, {
       headers,
     });
+
     if (data?.errors) {
       return getErrors(data.errors);
     }

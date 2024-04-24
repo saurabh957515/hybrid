@@ -1,14 +1,11 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import Layout from "../Layout";
-import axios from "axios";
 import PopUp from "../Fileds/PopUp";
 import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -17,10 +14,10 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Disclosure } from "@headlessui/react";
-import Books from "../Books/Books";
 import WhiteButton from "../Fileds/WhiteButton";
-import classNames, { storedToken } from "../Helper";
+import classNames from "../Helper";
 import { deleteById, editRoute, getRoute, postRoute } from "../../UseApi";
+import moment from "moment";
 
 function Authors() {
   const [authors, setAuthors] = useState([]);
@@ -63,6 +60,7 @@ function Authors() {
         setAuthorName("");
         toast.success("Author Deleted !!");
       } else {
+        console.log(res.errors)
         setError(res.errors);
       }
     })
@@ -95,7 +93,7 @@ function Authors() {
               title={
                 <WhiteButton className="border-gray-400">
                   <p className="text-base text-gray-900 dark:text-white">
-                    Add Book
+                    Add Author
                   </p>
                 </WhiteButton>
               }
@@ -153,13 +151,113 @@ function Authors() {
                         </div>
                       </div>
 
+                    </div>
+                    <p className="text-red-500 font-semibold ml-2 text-sm capitalize">
                       {error[`${author?.name}`]}
-                    </div>
+                    </p>
+
                   </Disclosure.Button>
-                  <Disclosure.Panel className="flex w-full">
-                    <div className="w-full p-5" key={book?._id}>
-                      <Books isAuthor={true} searchAuthor={author?._id} />{" "}
-                    </div>
+                  <Disclosure.Panel className="flex w-full bg-white">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-white">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-12"
+                          >No</th>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-72"
+                          >
+                            Title
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-72"
+                          >
+                            DateAdded
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                          >
+                            Total Pages
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                          >
+                            Description
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                          >
+                            Status
+                          </th>
+
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y-2 divide-gray-100">
+                        {author?.books?.length > 0 ? (
+                          author?.books?.map(
+                            (book, index) => (
+                              <tr key={index}>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-12"
+                                >{index + 1}</td>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-72"
+                                >
+                                  {book?.title}
+                                </td>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-72"
+                                >
+                                  Title
+                                  {moment(book?.publishDate).format("dd-mm-yyyy")}
+                                </td>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                >
+                                  {book?.pageCount}
+                                </td>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                >
+                                  {book?.description}
+                                </td>
+                                <td
+                                  scope="col"
+                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                >
+                                  status
+                                </td>
+                              </tr>
+                            )
+                          )
+                        ) : (
+                          <tr className="text-center">
+                            <td className="p-4" colSpan="9">
+                              <div className="m-12 text-center">
+
+                                <h3 className="mt-2 text-sm font-medium">
+                                  No Book Found From This Author
+                                </h3>
+                                <p className="mt-1 text-sm text-gray-500">
+                                  Please Add A Book To This Author.
+                                </p>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </Disclosure.Panel>
                 </>
               )}
