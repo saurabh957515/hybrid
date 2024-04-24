@@ -32,7 +32,9 @@ const AddBook = ({
     coverImage: "",
     description: "",
     book: "",
-  });
+    isComplete: false,
+    inWatchList: false
+  })
 
   useEffect(() => {
     if (isEdit) {
@@ -70,6 +72,8 @@ const AddBook = ({
       formData.append("pageCount", book.pageCount);
       formData.append("coverImage", book.coverImage); // Append file object
       formData.append("description", book.description);
+      formData.append("isComplete", false);
+      formData.append("inWatchList", false);
       editBook(book?._id, formData);
     } else {
       const formData = new FormData();
@@ -80,6 +84,8 @@ const AddBook = ({
       formData.append("description", book.description);
       formData.append("coverImage", book.coverImage);
       formData.append("book", book.book);
+      formData.append("isComplete", false);
+      formData.append("inWatchList", false);
       const data = postRoute("/api/book", formData).then(res => {
         if (res.data) {
           setBook(res.data);

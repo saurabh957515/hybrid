@@ -73,7 +73,7 @@ router.post(
     { name: "book", maxCount: 1 },
   ]),
   async (req, res) => {
-    const { title, author, publishDate, pageCount, description } = req.body;
+    const { title, author, publishDate, pageCount, description, isComplete, inWatchList } = req.body;
     try {
       const book = new Book({
         title: title,
@@ -83,6 +83,8 @@ router.post(
         description: description,
         coverImage: req?.files["coverImage"]?.[0]?.filename || null,
         book: req?.files["book"]?.[0]?.filename || null,
+        isComplete: isComplete,
+        inWatchList: inWatchList,
       });
       try {
         const newBook = await book.save();
@@ -120,6 +122,18 @@ router.put("/:id", upload.single("coverImage"), async (req, res) => {
     book.pageCount = req.body.pageCount;
     book.description = req.body.description;
     (book.coverImage = req?.file?.filename || null),
+      await book.save();
+    res.send("book updated successfully");
+  } catch (error) {
+    res.send(error);
+  }
+});
+router.put("/isfilter/:id", upload.single("coverImage"), async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id);
+    book.isComplete = req.body.isComplete,
+      book.inWatchList = req.body.inWatchList,
       await book.save();
     res.send("book updated successfully");
   } catch (error) {

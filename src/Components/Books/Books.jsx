@@ -1,21 +1,24 @@
 /** @format */
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import _ from "lodash";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
 import TextInput from "../Fileds/TextInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon } from "@heroicons/react/24/solid";
 import Datepicker from "react-tailwindcss-datepicker";
-import { Popover, Transition } from "@headlessui/react";
+import { Popover, Transition, Menu } from "@headlessui/react";
 import WhiteButton from "../Fileds/WhiteButton";
 import { useNavigate } from "react-router-dom";
 import { storedToken } from "../Helper";
 import { useDispatch } from "react-redux";
 import { setCurrentByName } from "../../store/Slices/NavigationSlice";
 import { deleteById, editRoute, getRoute } from "../../UseApi";
-
+import { CheckCircleIcon, CheckIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { BiBookmarkPlus } from "react-icons/bi";
+import { CiAlarmOn } from "react-icons/ci";
 export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
   const navigate = useNavigate();
   const [books, setBooks] = useState(oldbooks);
@@ -71,12 +74,21 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     })
   }
 
+  function changeBookFilter(id, book) {
+    const data = editRoute(`/api/book/isfilter/${id}`, book).then(res => {
+      if (res.data) {
+        getData();
+        setIsBookAdd(false);
+      } else {
+        setErrors(res.errors);
+      }
+    })
+  }
+
   function onClose() {
     setIsBookAdd((pre) => !pre);
     setIsEdit(false);
   }
-
-  const dispatch = useDispatch();
 
   return (
     <div className="bg-white dark:bg-gray-800">
@@ -201,49 +213,131 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
       )}
       <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 p-4 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
         {books?.map((book, index) => (
-          <div
-            key={index}
-            className="relative block max-w-sm p-6 overflow-hidden bg-center bg-cover rounded-lg shadow-lg h-96 dark:bg-neutral-700"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:8000/${book?.coverImage})`,
-            }}
-          >
-            <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
-              {book?.title}
-            </h5>
-            <div className="absolute grid grid-cols-3 gap-2 bottom-2 right-2 ">
-              <WhiteButton
-                onClick={() => {
-                  if (book?.book) {
-                    navigate("/readbook", { state: { bookData: book?.book } });
-                    dispatch(setCurrentByName("Start..."));
-                  }
-                }}
-                className="text-sm dark:opacity-75"
-              >
-                Read
-              </WhiteButton>
+          <div key={index} className='border-2 w-96 space-y-2 bg-white rounded-md'>
+            <div className='flex items-center justify-between px-5 pt-5'>
+              <div className="font-semibold">{book?.title}</div>
+              <div className='cursor-pointer'>
+                <Menu as="div" className="dropdown relative">
+                  <Menu.Button className="dropdown-btn">
+                    <span className="sr-only">Open options</span>
+                    <EllipsisHorizontalIcon className="h-6 w-6" aria-hidden="true" />
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="dropdown-body l-0 absolute w-28 bg-white shadow rounded-lg space-y-4 p-4">
+                      <Menu.Item>
+                        <div
+                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          onClick={() => {
+                            if (book?.book) {
+                              navigate("/readbook", { state: { bookData: book?.book } });
+                              dispatch(setCurrentByName("Start..."));
+                            }
+                          }}
+                        >
+                          Read
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <div
+                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          onClick={() => {
+                            setIsBookAdd(true);
+                            setIsEdit(true);
+                            setSelectedBook(book);
+                          }}
+                        >
+                          Edit
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <div
+                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          onClick={() => {
+                            deleteBook(book?._id);
+                          }}
+                        >
+                          Delete
+                        </div>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            </div>
+            <div className='h-68 px-4 border-1 border-green-500'>
+              <img
+                className="object-fill h-[350px] border w-96 rounded-lg"
+                src={`http://localhost:8000/${book?.coverImage}`}
+                alt={book?.title}
+              />
+            </div>
+            <div className='grid grid-cols-2 gap-x-4 w-full pb-5 p-5'>
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="flex items-center justify-center shadow cursor-pointer">
+                <span>
+                  {book?.isComplete ? <CheckCircleIcon className='h-12 w-12 text-green-400' /> : <CiAlarmOn className='h-12 w-12 text-green-400' />}
 
-              <WhiteButton
-                className="text-sm dark:opacity-75"
-                onClick={() => {
-                  setIsBookAdd(true);
-                  setIsEdit(true);
-                  setSelectedBook(book);
-                }}
-              >
-                Edit
-              </WhiteButton>
-              <WhiteButton
-                className="text-sm dark:opacity-75"
-                onClick={() => {
-                  deleteBook(book?._id)
-                }}
-              >
-                Delete
-              </WhiteButton>
+
+                </span>
+              </div>
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="flex items-center justify-center shadow cursor-pointer">
+                <span>
+                  {book?.inWatchList ? <BiBookmarkPlus className="h-12 w-12 text-blue-500" /> : <BookmarkIcon className="h-12 w-12 text-blue-500" />}
+                </span>
+              </div>
             </div>
           </div>
+
+          // <div
+          //   key={index}
+          //   className="relative block max-w-sm p-6 overflow-hidden bg-center bg-cover rounded-lg shadow-lg h-96 dark:bg-neutral-700"
+          //   style={{
+          //     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:8000/${book?.coverImage})`,
+          //   }}
+          // >
+          //   <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
+          //     {book?.title}
+          //   </h5>
+          //   <div className="absolute grid grid-cols-3 gap-2 bottom-2 right-2 ">
+          //     <WhiteButton
+          // onClick={() => {
+          //   if (book?.book) {
+          //     navigate("/readbook", { state: { bookData: book?.book } });
+          //     dispatch(setCurrentByName("Start..."));
+          //   }
+          // }}
+          //       className="text-sm dark:opacity-75"
+          //     >
+          //       Read
+          //     </WhiteButton>
+
+          //     <WhiteButton
+          //       className="text-sm dark:opacity-75"
+          // onClick={() => {
+          //   setIsBookAdd(true);
+          //   setIsEdit(true);
+          //   setSelectedBook(book);
+          // }}
+          //     >
+          //       Edit
+          //     </WhiteButton>
+          //     <WhiteButton
+          //       className="text-sm dark:opacity-75"
+          // onClick={() => {
+          //   deleteBook(book?._id)
+          // }}
+          //     >
+          //       Delete
+          //     </WhiteButton>
+          //   </div>
+          // </div>
         ))}
       </div>
 

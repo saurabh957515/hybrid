@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
+import TryComponent from "./Components/TryComponent";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.js",
@@ -78,11 +79,15 @@ const router = createBrowserRouter([
       </Layout>
     ),
   },
+  {
+    path: "try",
+    element: (<TryComponent />),
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <div className="h-[100vh] w-[100vw]">
+    <div className="h-full w-full">
       <ToastContainer
         position="top-right"
         autoClose={1500}
