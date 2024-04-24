@@ -16,7 +16,7 @@ function LogIn() {
     localStorage.setItem("token", postData?.data?.token);
     toast.success(postData?.data?.message);
     setTimeout(() => {
-      Navigate("/dashboard");
+      Navigate("/dashboard", { state: { webTokken: postData?.data?.token } });
     }, [1500]);
   };
 

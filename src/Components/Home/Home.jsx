@@ -5,6 +5,7 @@ import axios from "axios";
 import TextInput from "../Fileds/TextInput";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { getRoute } from "../../UseApi";
 
 function Home() {
   const [timer, setTimer] = useState(0);
@@ -31,26 +32,22 @@ function Home() {
     return () => clearInterval(intervalId);
   }, [isReading]);
 
-  const getTime = async (time) => {
-    try {
-      const timerData = await axios.get("/api/readbook/time", {
-        params: {
-          time: timer,
-          note: bookNote,
-          date: moment(),
-          isTimerOn: time,
-        },
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      });
-      setIsReading(timerData?.data?.isTimerOn);
-      setTimer(timerData?.data?.timer);
-      setIsLoader(false)
-      setBookNote('')
-    } catch (error) {
-      console.error(error);
-    }
+  const getTime = (time) => {
+    const data = getRoute("/api/readbook/time", {
+      time: timer,
+      note: bookNote,
+      date: moment(),
+      isTimerOn: time,
+    }).then((res) => {
+      if (res.data) {
+        setIsReading(res?.data?.isTimerOn);
+        setTimer(res?.data?.timer);
+        setIsLoader(false);
+        setBookNote("");
+      } else {
+        console.error(error);
+      }
+    });
   };
 
   useEffect(() => {
@@ -89,23 +86,34 @@ function Home() {
               setIsReading(!isReading);
             }}
             className={classNames(
-              isLoader ? "bg-[#2080df]" : isReading ? "bg-red-500" : "bg-green-500",
+              isLoader
+                ? "bg-[#2080df]"
+                : isReading
+                ? "bg-red-500"
+                : "bg-green-500",
               "w-2/4 p-2 rounded cursor-pointer -mt-2.5 flex justify-between items-center"
             )}
           >
-
-            {isLoader ?
-              <div className="loader text-white mx-auto" /> : <>
+            {isLoader ? (
+              <div className="mx-auto text-white loader" />
+            ) : (
+              <>
                 {isReading ? "End Timer" : "StartTimer"}
                 <ClockIcon className="w-5 h-5 " />
-
               </>
-            }
+            )}
           </div>
         </div>
         {/* ,!isLoader?"items-center":"w-full " */}
         <div className={classNames("flex p-4 h-28 w-full")}>
-          <span className={classNames("m-auto transition-all duration-1000", isLoader ? "hidden" : "")}>Reading Time : {formatTime(timer)}</span>
+          <span
+            className={classNames(
+              "m-auto transition-all duration-1000",
+              isLoader ? "hidden" : ""
+            )}
+          >
+            Reading Time : {formatTime(timer)}
+          </span>
         </div>
       </div>
     </div>
