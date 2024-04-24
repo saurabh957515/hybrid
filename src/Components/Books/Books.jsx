@@ -279,15 +279,15 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 alt={book?.title}
               />
             </div>
-            <div className='grid grid-cols-2 gap-x-4 w-full pb-5 p-5'>
-              <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="flex items-center justify-center shadow cursor-pointer">
+            <div className='gap-x-4 w-full pb-5 flex p-5'>
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="flex items-center justify-center cursor-pointer">
                 <span>
                   {book?.isComplete ? <CheckCircleIcon className='h-12 w-12 text-green-400' /> : <CiAlarmOn className='h-12 w-12 text-green-400' />}
 
 
                 </span>
               </div>
-              <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="flex items-center justify-center shadow cursor-pointer">
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="flex items-center justify-center cursor-pointer">
                 <span>
                   {book?.inWatchList ? <BiBookmarkPlus className="h-12 w-12 text-blue-500" /> : <BookmarkIcon className="h-12 w-12 text-blue-500" />}
                 </span>
@@ -340,8 +340,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
           // </div>
         ))}
       </div>
-
-      <button onClick={getData}>GetData</button>
     </div>
   );
 }
