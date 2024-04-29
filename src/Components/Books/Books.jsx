@@ -6,13 +6,13 @@ import _ from "lodash";
 import PopUp from "../Fileds/PopUp";
 import AddBook from "./AddBooks/AddBook";
 import TextInput from "../Fileds/TextInput";
-import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon } from "@heroicons/react/24/solid";
 import Datepicker from "react-tailwindcss-datepicker";
 import { Popover, Transition, Menu } from "@headlessui/react";
 import WhiteButton from "../Fileds/WhiteButton";
 import { useNavigate } from "react-router-dom";
-import { storedToken } from "../Helper";
+import classNames, { storedToken } from "../Helper";
 import { useDispatch } from "react-redux";
 import { setCurrentByName } from "../../store/Slices/NavigationSlice";
 import { deleteById, editRoute, getRoute } from "../../UseApi";
@@ -94,7 +94,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
     <div className="bg-white dark:bg-gray-800">
       {!isAuthor && (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center px-8 justify-between">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -105,7 +105,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
               <div>
                 <Popover className="relative top-1">
                   <Popover.Button>
-                    <FunnelIcon className="w-6 h-6 text-gray-300 dark:text-white" />
+                    <FunnelIcon className="w-6 h-6 text-gray-900 dark:text-white" />
                   </Popover.Button>
                   <Transition
                     enter="transition duration-100 ease-out"
@@ -117,7 +117,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                   >
                     <Popover.Panel className="absolute z-10 mt-2">
                       {({ close }) => (
-                        <div className="flex flex-col p-2 text-base font-medium text-gray-400 bg-white border border-gray-300 rounded-lg dark:bg-gray-800 w-44 dark:text-white">
+                        <div className="flex flex-col p-2 text-base font-medium text-gray-400 bg-white border border-gray-300 dark:border-gray-500  rounded-lg dark:bg-gray-800 w-44 dark:text-white">
                           <div
                             onClick={() => {
                               setDateRange(true);
@@ -143,12 +143,11 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 </Popover>
               </div>
 
-              <div className="items-center w-full">
                 <Datepicker
                   useRange={dateRange}
                   primaryColor="blue"
                   asSingle={!dateRange}
-                  inputClassName="border border-gray-500 dark:border-white w-full py-1.5 text-opacity-80 pr-10 px-2 rounded-lg dark:bg-gray-800 dark:text-white"
+                  inputClassName="border border-gray-500 dark:border-gray-500 w-full py-1.5 text-opacity-80 pr-10 px-2 rounded-lg dark:bg-gray-800 dark:text-white"
                   value={searchOptions?.dateOptions}
                   onChange={(date) => {
                     setSearchOptions((pre) => ({
@@ -157,7 +156,6 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                     }));
                   }}
                 />
-              </div>
               <div className="relative pt-2 text-gray-600 grow">
                 <TextInput
                   value={searchOptions?.title}
@@ -167,7 +165,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                       title: e.target.value,
                     }))
                   }
-                  className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+                  className="h-10 px-5 pr-16 border-gray-300 rounded-lg dark:text-white dark:border-gray-500 dark:bg-gray-800 border-1 focus:outline-none"
                   type="search"
                   placeholder="Search"
                 />
@@ -184,14 +182,11 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 </button>
               </div>
             </form>
-            <div className="text-right mr-4">
-              <PopUp
+            <PopUp
                 title={
-                  <WhiteButton className="border-gray-400">
-                    <p className="text-base text-gray-900 dark:text-white">
-                      Add Book
-                    </p>
-                  </WhiteButton>
+                  <p className="text-base text-gray-500 font-semibold border-gray-300 border px-3 py-1.5 rounded-md  dark:text-white">
+                  Add Book
+                </p>
                 }
                 setIsOpen={onClose}
                 isOpen={isBookAdd}
@@ -207,34 +202,37 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                   authorOptions={authorOptions}
                 />
               </PopUp>
-            </div>
           </div>
         </>
       )}
       <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 text-gray-900 bg-white p-4 w-full dark:bg-gray-800 dark:text-white">
         {books?.map((book, index) => (
-          <div key={index} className='border-2 space-y-2 bg-white dark:bg-gray-800 rounded-md'>
+          <div key={index} className='border-2 dark:border dark:border-gray-500 space-y-2 bg-white dark:bg-gray-800 rounded-md'>
             <div className='flex items-center justify-between px-5 pt-5'>
               <div className="font-semibold capitalize">{book?.title}</div>
               <div className='cursor-pointer'>
-                <Menu as="div" className="dropdown relative">
-                  <Menu.Button className="dropdown-btn">
-                    <span className="sr-only">Open options</span>
-                    <EllipsisHorizontalIcon className="h-6 w-6" aria-hidden="true" />
-                  </Menu.Button>
+                <Menu as="div" className="relative ">
+                  <div>
+                    <Menu.Button className="relative flex text-sm rounded-full focus:outline-none">
+                      <EllipsisHorizontalIcon className="h-6 w-6" aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
+                    enter="transition ease-out duration-500"
                     enterFrom="transform opacity-0 scale-95"
                     enterTo="transform opacity-100 scale-100"
                     leave="transition ease-in duration-75"
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="dropdown-body l-0 absolute w-28 bg-white shadow rounded-lg space-y-4 p-4">
+
+                    <Menu.Items className="absolute right-0 z-10 w-48 py-1 origin-top-right bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         <div
-                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          className={classNames(
+                            "block px-4 py-2 text-sm text-gray-900 font-semibold"
+                          )}
                           onClick={() => {
                             if (book?.book) {
                               navigate("/readbook", { state: { bookData: book?.book } });
@@ -247,7 +245,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                       </Menu.Item>
                       <Menu.Item>
                         <div
-                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          className={classNames(
+                            "block px-4 py-2 text-sm text-gray-900 font-semibold"
+                          )}
                           onClick={() => {
                             setIsBookAdd(true);
                             setIsEdit(true);
@@ -259,7 +259,9 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                       </Menu.Item>
                       <Menu.Item>
                         <div
-                          className="text-sm font-semibold text-latisGray-700 capitalize"
+                          className={classNames(
+                            "block px-4 py-2 text-sm text-gray-900 font-semibold"
+                          )}
                           onClick={() => {
                             deleteBook(book?._id);
                           }}
@@ -272,24 +274,23 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 </Menu>
               </div>
             </div>
-            <div className='h-68 px-4 border-1 border-green-500'>
+            <div className='h-68 px-4 border-1  dark:border-0  '>
               <img
-                className="object-fill h-[350px] border rounded-lg"
+                className="object-fill h-[350px] border dark:border-0 rounded-lg"
                 src={`http://localhost:8000/${book?.coverImage}`}
                 alt={book?.title}
               />
+              {/* <ClockIcon className="w-5 h-5 " /> */}
             </div>
-            <div className='gap-x-4 w-full pb-5 flex p-5'>
-              <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="flex items-center justify-center cursor-pointer">
+            <div className='gap-x-4 w-full flex py-3'>
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="capitalize text-lg items-center justify-center px-5 cursor-pointer flex">
                 <span>
-                  {book?.isComplete ? <CheckCircleIcon className='h-12 w-12 text-green-400' /> : <CiAlarmOn className='h-12 w-12 text-green-400' />}
-
-
+                  {book?.isComplete ? "Completed" : "Remaining"} {book?.isComplete ? <CheckCircleIcon className='h-10 w-10 text-green-400 inline' /> : <ClockIcon className='h-10 w-10 text-red-400 inline' />}
                 </span>
               </div>
-              <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="flex items-center justify-center cursor-pointer">
+              <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="capitalize text-lg items-center justify-center cursor-pointer flex">
                 <span>
-                  {book?.inWatchList ? <BiBookmarkPlus className="h-12 w-12 text-blue-500" /> : <BookmarkIcon className="h-12 w-12 text-blue-500" />}
+                  {book?.inWatchList ? "Add To" : "Remove From"}   {book?.inWatchList ? <BiBookmarkPlus className="h-10 w-10 text-blue-500 inline" /> : <BookmarkIcon className="h-10 w-10 text-blue-500 inline" />}
                 </span>
               </div>
             </div>
@@ -297,45 +298,86 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
 
           // <div
           //   key={index}
-          //   className="relative block max-w-sm p-6 overflow-hidden bg-center bg-cover rounded-lg shadow-lg h-96 dark:bg-neutral-700"
+          //   className="relative block p-3 overflow-hidden bg-center bg-cover rounded-lg shadow-lg h-96 dark:bg-neutral-700"
           //   style={{
           //     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(http://localhost:8000/${book?.coverImage})`,
           //   }}
           // >
-          //   <h5 className="absolute text-xl font-medium leading-tight text-white capitalize dark:opacity-75 top-2 left-2 dark:text-neutral-50">
+          //   <h5 className=" text-xl flex justify-between font-medium leading-tight text-white capitalize dark:opacity-75 dark:text-neutral-50">
           //     {book?.title}
-          //   </h5>
-          //   <div className="absolute grid grid-cols-3 gap-2 bottom-2 right-2 ">
-          //     <WhiteButton
-          // onClick={() => {
-          //   if (book?.book) {
-          //     navigate("/readbook", { state: { bookData: book?.book } });
-          //     dispatch(setCurrentByName("Start..."));
-          //   }
-          // }}
-          //       className="text-sm dark:opacity-75"
-          //     >
-          //       Read
-          //     </WhiteButton>
+          //     <Menu as="div" className="relative ">
+          //       <div>
+          //         <Menu.Button className="relative flex text-sm rounded-full focus:outline-none">
+          //           <EllipsisHorizontalIcon className="h-6 w-6" aria-hidden="true" />
+          //         </Menu.Button>
+          //       </div>
+          //       <Transition
+          //         as={Fragment}
+          //         enter="transition ease-out duration-500"
+          //         enterFrom="transform opacity-0 scale-95"
+          //         enterTo="transform opacity-100 scale-100"
+          //         leave="transition ease-in duration-75"
+          //         leaveFrom="transform opacity-100 scale-100"
+          //         leaveTo="transform opacity-0 scale-95"
+          //       >
 
-          //     <WhiteButton
-          //       className="text-sm dark:opacity-75"
-          // onClick={() => {
-          //   setIsBookAdd(true);
-          //   setIsEdit(true);
-          //   setSelectedBook(book);
-          // }}
-          //     >
-          //       Edit
-          //     </WhiteButton>
-          //     <WhiteButton
-          //       className="text-sm dark:opacity-75"
-          // onClick={() => {
-          //   deleteBook(book?._id)
-          // }}
-          //     >
-          //       Delete
-          //     </WhiteButton>
+          //         <Menu.Items className="absolute right-0 z-10 w-48 py-1 origin-top-right bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+          //           <Menu.Item>
+          //             <div
+          //               className={classNames(
+          //                 "block px-4 py-2 text-sm text-gray-900 font-semibold"
+          //               )}
+          //               onClick={() => {
+          //                 if (book?.book) {
+          //                   navigate("/readbook", { state: { bookData: book?.book } });
+          //                   dispatch(setCurrentByName("Start..."));
+          //                 }
+          //               }}
+          //             >
+          //               Read
+          //             </div>
+          //           </Menu.Item>
+          //           <Menu.Item>
+          //             <div
+          //               className={classNames(
+          //                 "block px-4 py-2 text-sm text-gray-900 font-semibold"
+          //               )}
+          //               onClick={() => {
+          //                 setIsBookAdd(true);
+          //                 setIsEdit(true);
+          //                 setSelectedBook(book);
+          //               }}
+          //             >
+          //               Edit
+          //             </div>
+          //           </Menu.Item>
+          //           <Menu.Item>
+          //             <div
+          //               className={classNames(
+          //                 "block px-4 py-2 text-sm text-gray-900 font-semibold"
+          //               )}
+          //               onClick={() => {
+          //                 deleteBook(book?._id);
+          //               }}
+          //             >
+          //               Delete
+          //             </div>
+          //           </Menu.Item>
+          //         </Menu.Items>
+          //       </Transition>
+          //     </Menu>
+          //   </h5>
+          //   <div className="absolute  w-full bottom-2 flex right-2">
+          //     <div onClick={() => changeBookFilter(book?._id, { inWatchList: book?.inWatchList, isComplete: !book?.isComplete })} className="capitalize text-white text-lg items-center justify-center px-5 cursor-pointer flex">
+          //       <span>
+          //         {book?.isComplete ? "Completed" : "Remaining"} {book?.isComplete ? <CheckCircleIcon className='h-10 w-10 text-green-400 inline' /> : <ClockIcon className='h-10 w-10 text-red-400 inline' />}
+          //       </span>
+          //     </div>
+          //     <div onClick={() => changeBookFilter(book?._id, { inWatchList: !book?.inWatchList, isComplete: book?.isComplete })} className="capitalize text-white text-lg items-center justify-center cursor-pointer flex">
+          //       <span>
+          //         {book?.inWatchList ? "Add To" : "Remove From"}   {book?.inWatchList ? <BiBookmarkPlus className="h-10 w-10 text-blue-500 inline" /> : <BookmarkIcon className="h-10 w-10 text-blue-500 inline" />}
+          //       </span>
+          //     </div>
           //   </div>
           // </div>
         ))}

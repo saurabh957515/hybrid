@@ -53,7 +53,7 @@ function Layout({ children, className }) {
   return (
     <div
       className={classNames(
-        "relative flex bg-blue-500 flex-col w-full h-full border dark:bg-gray-800 "
+        "relative flex flex-col w-full h-full border dark:bg-gray-800 "
       )}
     >
       <div></div>
@@ -136,8 +136,6 @@ function Layout({ children, className }) {
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
-
-                    {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
                       <div>
                         <Menu.Button className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -152,7 +150,7 @@ function Layout({ children, className }) {
                       </div>
                       <Transition
                         as={Fragment}
-                        enter="transition ease-out duration-100"
+                        enter="transition ease-out duration-500"
                         enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100"
                         leave="transition ease-in duration-75"
@@ -224,6 +222,8 @@ function Layout({ children, className }) {
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
+                      <Link to={item?.to}>
+                      </Link>
                       {item.name}
                     </Disclosure.Button>
                   ))}
@@ -232,29 +232,9 @@ function Layout({ children, className }) {
             </>
           )}
         </Disclosure>
-        {/* <div
-          aria-live="assertive"
-          className="absolute bottom-0 left-0 right-0 flex items-end px-4 py-6 mt-2 top-6 sm:items-start "
-        >
-          <div className="flex flex-col items-center w-full space-y-4 sm:items-end">
-            Notification panel, dynamically insert this into the live region when it needs to be displayed
-            <div className="relative w-full max-w-sm overflow-hidden bg-white rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 ">
-              <ToastContainer
-                autoClose={1500}
-                hideProgressBar={false}
-                newestOnTop={true}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable={true}
-                pauseOnHover={false}
-                theme="light"
-              />
-            </div>
-          </div>
-        </div> */}
       </div>
-      <div className="bg-[#F9F9F9] grow">{children}</div>
+      <div className="bg-[#F9F9F9] dark:bg-gray-800 grow">{children}</div>
+      
     </div>
   );
 }

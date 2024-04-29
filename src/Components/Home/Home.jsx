@@ -1,7 +1,6 @@
 import { BookOpenIcon, ClockIcon } from "@heroicons/react/24/outline";
-import React, { useContext, useEffect, useState } from "react";
-import classNames, { FlashContext, storedToken } from "../Helper";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import classNames from "../Helper";
 import TextInput from "../Fileds/TextInput";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -59,9 +58,9 @@ function Home() {
     return moment.utc(duration.asMilliseconds()).format("HH:mm:ss");
   }
   return (
-    <div className="w-full p-5 ">
-      <div className="items-center px-2 border rounded w-96">
-        <div className="flex items-center justify-between p-4 text-base font-medium capitalize border-b">
+    <div className="w-full sm:p-5 dark:text-white">
+      <div className=" px-2 border dark:border-gray-500 rounded sm:w-96 w-60 sm:mt-0 mt-2 sm:ml-0 ml-4">
+        <div className="flex items-center justify-between p-4 text-base font-medium capitalize dark:border-gray-500 border-b">
           <span>Book ReadingTime</span>
           <span>
             <BookOpenIcon className="w-5 h-5" />
@@ -69,7 +68,7 @@ function Home() {
         </div>
         <div
           className={classNames(
-            "p-4 text-white rounded flex justify-between cursor-default border-b items-center space-x-2"
+            "p-4 text-white rounded flex justify-between cursor-default dark:border-gray-500 border-b items-center space-x-2"
           )}
         >
           <TextInput
@@ -89,8 +88,8 @@ function Home() {
               isLoader
                 ? "bg-[#2080df]"
                 : isReading
-                ? "bg-red-500"
-                : "bg-green-500",
+                  ? "bg-red-500"
+                  : "bg-green-500",
               "w-2/4 p-2 rounded cursor-pointer -mt-2.5 flex justify-between items-center"
             )}
           >
@@ -104,8 +103,7 @@ function Home() {
             )}
           </div>
         </div>
-        {/* ,!isLoader?"items-center":"w-full " */}
-        <div className={classNames("flex p-4 h-28 w-full")}>
+        <div className={classNames("flex p-4  h-28 w-full")}>
           <span
             className={classNames(
               "m-auto transition-all duration-1000",

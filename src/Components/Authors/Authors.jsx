@@ -76,7 +76,7 @@ function Authors() {
           <form className="flex items-center w-3/4 px-8 mx-auto space-x-2 ">
             <div className="relative pt-2 text-gray-600 grow">
               <TextInput
-                className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-white dark:bg-gray-800 border-1 focus:outline-none"
+                className="h-10 px-5 pr-16 text-white border-gray-300 rounded-lg C dark:border-gray-500 dark:bg-gray-800 border-1 focus:outline-none"
                 type="search"
                 placeholder="Search"
               />
@@ -88,28 +88,24 @@ function Authors() {
               </button>
             </div>
           </form>
-          <div className="inline-block px-8 text-right">
-            <PopUp
-              title={
-                <WhiteButton className="border-gray-400">
-                  <p className="text-base text-gray-900 dark:text-white">
-                    Add Author
-                  </p>
-                </WhiteButton>
-              }
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-            >
-              <form onSubmit={onSubmit}>
-                <label>Name</label>
-                <TextInput
-                  handleChange={(e) => setAuthorName(e.target.value)}
-                  value={authorName}
-                />
-                <PrimaryButton>Submit</PrimaryButton>
-              </form>
-            </PopUp>
-          </div>
+          <PopUp
+            title={
+              <p className="text-base text-gray-500 font-semibold border-gray-300 border px-3 py-1.5 rounded-md  dark:text-white">
+                Add Author
+              </p>
+            }
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          >
+            <form onSubmit={onSubmit}>
+              <label>Name</label>
+              <TextInput
+                handleChange={(e) => setAuthorName(e.target.value)}
+                value={authorName}
+              />
+              <PrimaryButton>Submit</PrimaryButton>
+            </form>
+          </PopUp>
         </div>
         <div className="flex flex-col w-full h-full space-y-2.5">
           {authors?.map((author, index) => (
@@ -117,7 +113,7 @@ function Authors() {
               {({ open }) => (
                 <>
                   <Disclosure.Button as="div">
-                    <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:text-white custom-border">
+                    <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:border-gray-500 dark:text-white custom-border">
                       <div className="flex justify-between w-full">
                         <span>
                           {index + 1} {author?.name}
@@ -157,84 +153,84 @@ function Authors() {
                     </p>
 
                   </Disclosure.Button>
-                  <Disclosure.Panel className="flex w-full bg-white">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-white">
+                  <Disclosure.Panel className="flex w-full bg-white dark:bg-gray-800 dark:border-gray-500">
+                    <table className="min-w-full divide-y dark:divide-gray-500 divide-gray-200">
+                      <thead className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                         <tr>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-12"
+                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-12"
                           >No</th>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-72"
+                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-72"
                           >
                             Title
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-72"
+                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-72"
                           >
                             DateAdded
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                            className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
                           >
                             Total Pages
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-52"
                           >
                             Description
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left text-gray-900 capitalize w-52"
+                            className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
                           >
                             Status
                           </th>
 
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y-2 divide-gray-100">
+                      <tbody className="dark:text-white text-gray-900 divide-y-2  dark:divide-gray-500">
                         {author?.books?.length > 0 ? (
                           author?.books?.map(
                             (book, index) => (
                               <tr key={index}>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-12"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-12"
                                 >{index + 1}</td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-72"
+                                  className="px-3 py-5 text-sm font-normal text-left  capitalize w-72"
                                 >
                                   {book?.title}
                                 </td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-72"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-72"
                                 >
                                   Title
                                   {moment(book?.publishDate).format("dd-mm-yyyy")}
                                 </td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-52"
                                 >
                                   {book?.pageCount}
                                 </td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-52"
                                 >
                                   {book?.description}
                                 </td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left text-gray-900 capitalize w-52"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-52"
                                 >
                                   status
                                 </td>
@@ -242,7 +238,7 @@ function Authors() {
                             )
                           )
                         ) : (
-                          <tr className="text-center">
+                          <tr className="text-center dark:border-b border-gray-500">
                             <td className="p-4" colSpan="9">
                               <div className="m-12 text-center">
 

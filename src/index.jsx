@@ -86,7 +86,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <div className="h-full w-full">
+    <div className="h-full w-full dark:bg-gray-800">
       <ToastContainer
         position="top-right"
         autoClose={1500}
