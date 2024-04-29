@@ -5,9 +5,9 @@ import { Dialog, Transition } from "@headlessui/react";
 
 export default function PopUp({ children, setIsOpen, isOpen, title }) {
   return (
-    <div>
+    <div className="">
       <h1
-        className="relative text-lg text-gray-900 cursor-pointer text-semibold dark:text-white"
+        className="text-lg text-gray-900 cursor-pointer text-semibold dark:text-white"
         onClick={() => setIsOpen(true)}
       >
         {title}

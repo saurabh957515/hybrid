@@ -53,7 +53,7 @@ function Layout({ children, className }) {
   return (
     <div
       className={classNames(
-        "relative flex flex-col w-full h-full border dark:bg-gray-800 "
+        "relative flex bg-blue-500 flex-col w-full h-full border dark:bg-gray-800 "
       )}
     >
       <div></div>

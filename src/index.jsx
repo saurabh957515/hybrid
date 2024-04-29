@@ -5,8 +5,7 @@ import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
+
 } from "react-router-dom";
 import Layout from "./Components/Layout";
 import Authors from "./Components/Authors/Authors";

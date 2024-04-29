@@ -184,7 +184,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
                 </button>
               </div>
             </form>
-            <div className="inline-block px-8 text-right">
+            <div className="text-right mr-4">
               <PopUp
                 title={
                   <WhiteButton className="border-gray-400">
@@ -211,11 +211,11 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
           </div>
         </>
       )}
-      <div className="grid-cols-4 gap-4 text-gray-900 bg-white max-sm:p-3 max-sm:space-y-2.5 p-4 sm:grid gap-x-4 dark:bg-gray-800 dark:text-white">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 text-gray-900 bg-white p-4 w-full dark:bg-gray-800 dark:text-white">
         {books?.map((book, index) => (
-          <div key={index} className='border-2 w-96 space-y-2 bg-white rounded-md'>
+          <div key={index} className='border-2 space-y-2 bg-white dark:bg-gray-800 rounded-md'>
             <div className='flex items-center justify-between px-5 pt-5'>
-              <div className="font-semibold">{book?.title}</div>
+              <div className="font-semibold capitalize">{book?.title}</div>
               <div className='cursor-pointer'>
                 <Menu as="div" className="dropdown relative">
                   <Menu.Button className="dropdown-btn">
@@ -274,7 +274,7 @@ export default function Books({ oldbooks = [], searchAuthor = "", isAuthor }) {
             </div>
             <div className='h-68 px-4 border-1 border-green-500'>
               <img
-                className="object-fill h-[350px] border w-96 rounded-lg"
+                className="object-fill h-[350px] border rounded-lg"
                 src={`http://localhost:8000/${book?.coverImage}`}
                 alt={book?.title}
               />
