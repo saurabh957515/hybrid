@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PopUp from "../Fileds/PopUp";
 import TextInput from "../Fileds/TextInput";
 import PrimaryButton from "../Fileds/PrimaryButton";
@@ -27,18 +27,21 @@ function Authors() {
   const [selectedAuthor, setSelectedAuthor] = useState({});
   const [book, setBook] = useState({});
   const [authorName, setAuthorName] = useState("");
-
+  const [openPanel, setOpenPanel] = useState(null);
+  const refModel = useRef(null);
   async function onSubmit(e) {
     e.preventDefault();
     if (isEdit) {
-      const data = editRoute(`/api/author/${selectedAuthor?._id}`, { name: authorName }).then(res => {
+      const data = editRoute(`/api/author/${selectedAuthor?._id}`, {
+        name: authorName,
+      }).then((res) => {
         if (res.data) {
           setIsEdit(false);
           setIsOpen(false);
         }
-      })
+      });
     } else {
-      const data = await postRoute("/api/author", { name: authorName })
+      const data = await postRoute("/api/author", { name: authorName });
       setIsOpen(false);
       toast.success("Author Successfully Saved !", {});
       setAuthorName("");
@@ -46,29 +49,38 @@ function Authors() {
   }
 
   function getAuthors() {
-    const data = getRoute("/api/author").then(res => {
+    const data = getRoute("/api/author").then((res) => {
       if (res.data) {
-        setAuthors(res.data.authors)
+        setAuthors(res.data.authors);
       }
-    })
+    });
   }
 
   async function deleteAuthor(id) {
-    const data = deleteById(`/api/author/${id}`).then(res => {
+    const data = deleteById(`/api/author/${id}`).then((res) => {
       if (res.data) {
         getAuthors();
         setAuthorName("");
         toast.success("Author Deleted !!");
       } else {
-        console.log(res.errors)
+        console.log(res.errors);
         setError(res.errors);
       }
-    })
+    });
   }
   useEffect(() => {
     getAuthors();
   }, [isOpen]);
 
+  const togglePanel = (panel) => {
+    if (openPanel?.key === panel?.key) {
+      openPanel?.close();
+    } else {
+      setOpenPanel(panel);
+    }
+    openPanel?.close();
+    refModel.current.close();
+  };
   return (
     <div className="relative h-full ">
       <div className=" w-full h-[80vh] p-5 ">
@@ -110,102 +122,111 @@ function Authors() {
         <div className="flex flex-col w-full h-full space-y-2.5">
           {authors?.map((author, index) => (
             <Disclosure defaultOpen={index == 0} className="w-full" key={index}>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button as="div">
-                    <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:border-gray-500 dark:text-white custom-border">
-                      <div className="flex justify-between w-full">
-                        <span>
-                          {index + 1} {author?.name}
-                        </span>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setAuthorName(author?.name);
-                              setIsOpen(true);
-                              setIsEdit(true);
-                              setSelectedAuthor(author);
-                            }}
-                          >
-                            <PencilSquareIcon className="w-6 h-6 text-blue-500" />
-                          </button>
-                          <button onClick={(e) => {
-                            e.stopPropagation();
-                            deleteAuthor(author?._id)
-                          }}>
-                            <TrashIcon className="w-6 h-6 text-red-500 " />
-                          </button>
-                          <button>
-                            <ChevronDownIcon
-                              className={classNames(
-                                open ? "rotate-180" : "",
-                                "h-5 w-5"
-                              )}
-                            />
-                          </button>
+              {(panel) => {
+                if (!index) {
+                  refModel.current = { ...panel, key: index };
+                }
+                return (
+                  <>
+                    <Disclosure.Button
+                      onClick={() => togglePanel({ ...panel, key: index })}
+                      as="div"
+                    >
+                      <div className="px-2 mx-auto text-lg font-medium text-gray-500 dark:border-gray-500 dark:text-white custom-border">
+                        <div className="flex justify-between w-full">
+                          <span>
+                            {index + 1} {author?.name}
+                          </span>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAuthorName(author?.name);
+                                setIsOpen(true);
+                                setIsEdit(true);
+                                setSelectedAuthor(author);
+                              }}
+                            >
+                              <PencilSquareIcon className="w-6 h-6 text-blue-500" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteAuthor(author?._id);
+                              }}
+                            >
+                              <TrashIcon className="w-6 h-6 text-red-500 " />
+                            </button>
+                            <button>
+                              <ChevronDownIcon
+                                className={classNames(
+                                  panel.open ? "rotate-180" : "",
+                                  "h-5 w-5"
+                                )}
+                              />
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                    </div>
-                    <p className="text-red-500 font-semibold ml-2 text-sm capitalize">
-                      {error[`${author?.name}`]}
-                    </p>
-
-                  </Disclosure.Button>
-                  <Disclosure.Panel className="flex w-full bg-white dark:bg-gray-800 dark:border-gray-500">
-                    <table className="min-w-full divide-y dark:divide-gray-500 divide-gray-200">
-                      <thead className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-12"
-                          >No</th>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-72"
-                          >
-                            Title
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-72"
-                          >
-                            DateAdded
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
-                          >
-                            Total Pages
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left  capitalize w-52"
-                          >
-                            Description
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
-                          >
-                            Status
-                          </th>
-
-                        </tr>
-                      </thead>
-                      <tbody className="dark:text-white text-gray-900 divide-y-2  dark:divide-gray-500">
-                        {author?.books?.length > 0 ? (
-                          author?.books?.map(
-                            (book, index) => (
+                      <p className="ml-2 text-sm font-semibold text-red-500 capitalize">
+                        {error[`${author?.name}`]}
+                      </p>
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="flex w-full bg-white dark:bg-gray-800 dark:border-gray-500">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
+                        <thead className="text-gray-900 bg-white dark:bg-gray-800 dark:text-white">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="w-12 px-3 py-5 text-sm font-semibold text-left capitalize"
+                            >
+                              No
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-5 text-sm font-semibold text-left capitalize w-72"
+                            >
+                              Title
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-5 text-sm font-semibold text-left capitalize w-72"
+                            >
+                              DateAdded
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
+                            >
+                              Total Pages
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
+                            >
+                              Description
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-5 text-sm font-semibold text-left capitalize w-52"
+                            >
+                              Status
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-900 divide-y-2 dark:text-white dark:divide-gray-500">
+                          {author?.books?.length > 0 ? (
+                            author?.books?.map((book, index) => (
                               <tr key={index}>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-12"
-                                >{index + 1}</td>
+                                  className="w-12 px-3 py-5 text-sm font-normal text-left capitalize"
+                                >
+                                  {index + 1}
+                                </td>
                                 <td
                                   scope="col"
-                                  className="px-3 py-5 text-sm font-normal text-left  capitalize w-72"
+                                  className="px-3 py-5 text-sm font-normal text-left capitalize w-72"
                                 >
                                   {book?.title}
                                 </td>
@@ -214,7 +235,9 @@ function Authors() {
                                   className="px-3 py-5 text-sm font-normal text-left capitalize w-72"
                                 >
                                   Title
-                                  {moment(book?.publishDate).format("dd-mm-yyyy")}
+                                  {moment(book?.publishDate).format(
+                                    "dd-mm-yyyy"
+                                  )}
                                 </td>
                                 <td
                                   scope="col"
@@ -235,28 +258,27 @@ function Authors() {
                                   status
                                 </td>
                               </tr>
-                            )
-                          )
-                        ) : (
-                          <tr className="text-center dark:border-b border-gray-500">
-                            <td className="p-4" colSpan="9">
-                              <div className="m-12 text-center">
-
-                                <h3 className="mt-2 text-sm font-medium">
-                                  No Book Found From This Author
-                                </h3>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  Please Add A Book To This Author.
-                                </p>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </Disclosure.Panel>
-                </>
-              )}
+                            ))
+                          ) : (
+                            <tr className="text-center border-gray-500 dark:border-b">
+                              <td className="p-4" colSpan="9">
+                                <div className="m-12 text-center">
+                                  <h3 className="mt-2 text-sm font-medium">
+                                    No Book Found From This Author
+                                  </h3>
+                                  <p className="mt-1 text-sm text-gray-500">
+                                    Please Add A Book To This Author.
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </Disclosure.Panel>
+                  </>
+                );
+              }}
             </Disclosure>
           ))}
         </div>
