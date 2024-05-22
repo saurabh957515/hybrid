@@ -73,13 +73,21 @@ function Authors() {
   }, [isOpen]);
 
   const togglePanel = (panel) => {
-    if (openPanel?.key === panel?.key) {
-      openPanel?.close();
-    } else {
-      setOpenPanel(panel);
+    if (openPanel) {
+      if (
+        openPanel.key !== panel.key &&
+        openPanel.open
+      ) {
+        openPanel.close();
+      }
+    } else if (refModel.current.key !== panel.key) {
+      refModel.current.close()
+      refModel.current = null
     }
-    openPanel?.close();
-    refModel.current.close();
+    setOpenPanel({
+      ...panel,
+      open: !panel.open,
+    });
   };
   return (
     <div className="relative h-full ">
